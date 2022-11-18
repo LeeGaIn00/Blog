@@ -1,0 +1,51 @@
+.mb-main {
+    padding: 10px 20px 20px 20px; // 위 오 아 왼
+    margin: 10px 15%; // 세 가
+
+    .search-bar {
+        display: flex;
+        justify-content: end;
+        padding-top: 20px;
+        align-items: center;
+        text-align: center;
+    }
+    .mb-tb-wrap {
+        margin: 80px 10% 0px 10%;
+        .mb-tb-capt {
+            padding: 10px 0px;
+            span {
+                &:nth-child(1) {
+                    font-size: 25px;
+                    font-weight: bold;
+                }
+                &:nth-child(2) {
+                    float: right;
+                }
+            }
+        }
+        table {
+            border-bottom: 1px solid gray;
+            border-collapse: collapse;
+            vertical-align: middle;
+            th, td:not(.mb-tb-txt) {
+                border-top: 1px solid gray;
+            }
+            th {
+                text-align: center;
+            }
+            .mb-tb-title {
+                padding-top: 15px;
+            }
+            .mb-tb-txt {
+                padding-bottom: 15px;
+                p {
+                    margin-bottom: 0;
+                }
+            }
+            .mb-tb-date {
+                text-align: end;
+            }
+        }
+    }
+
+}

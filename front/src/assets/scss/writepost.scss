@@ -1,0 +1,24 @@
+.wr-main {
+    padding: 10px 20px 20px 20px; // 위 오 아 왼
+    margin: 10px 15%; // 세 가
+    .wr-wrapper {
+        margin: 5% 5%;
+        .wr-title {
+            input {
+                margin: 20px 0;
+                border-radius: 0%;
+                &:focus {
+                    box-shadow: none;
+                    outline: none;
+                    border-color: #ced4da;
+                }
+            }
+        }
+        .wr-btn {
+            float: right;
+            button {
+                margin-left: 5px;
+            }
+        }
+    }  
+}
