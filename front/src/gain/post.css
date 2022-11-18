@@ -1,0 +1,36 @@
+.header {
+   display: flex;
+   justify-content: center;
+   font-size: larger;
+   align-items: center;
+   border: 1px solid black;
+   height: 100px;
+}
+
+
+body{
+   min-width: 1150px;
+
+}
+.post-wrapper{
+   margin: 50px auto;
+   padding: auto;
+   justify-content: center;
+   justify-items: center;
+   width: 700px;  
+}
+
+.post-title{
+   font-size: 30px;
+   color: black;
+   font-weight: 500;
+}
+
+.post-nickname{
+   color: rgb(0, 0, 0);
+   font-weight: 300;
+}
+
+.post-date{
+   color: rgb(151, 149, 149);
+}
