@@ -33,6 +33,13 @@ class MyBlog extends Component {
         this.props.history.push("/create-post/")
     };
 
+    /* 글 상세보기로 이동 */
+    readPost(no) {
+        /* 조회수 증가 */
+        PostService.getPost(no);
+        this.props.history.push(`/post-detail/${no}`);
+    }
+
     render() {
         return (
             <div className="mb-main">
@@ -58,7 +65,7 @@ class MyBlog extends Component {
                                 this.state.posts.map (
                                     post =>
                                     <>
-                                        <tr>
+                                        <tr onClick={() => this.readPost(post.id)}>
                                             <th scope="row" rowSpan={2}>
                                                 사진
                                             </th>
@@ -69,7 +76,7 @@ class MyBlog extends Component {
                                                 {post.createdTime.substring(0, 10)}
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr onClick={() => this.readPost(post.id)}>
                                             <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: post.text }} >
                                             </td>
                                         </tr>

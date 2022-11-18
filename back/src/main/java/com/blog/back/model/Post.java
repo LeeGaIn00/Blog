@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -35,5 +36,10 @@ public class Post {
     @PrePersist
     public void prePersist(){
         this.createdTime = this.createdTime == null ? new Timestamp(System.currentTimeMillis()) : this.createdTime;
+    }
+
+    public String getCreatedTime() {
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        return date.format(createdTime);
     }
 }

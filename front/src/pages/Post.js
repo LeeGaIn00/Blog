@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './post.css';
-import Service from './service.js';
+import '../assets/css/post.css';
+import PostService from '../service/PostService.js';
 
 class Post extends Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class Post extends Component {
         }
     }
     componentDidMount() {
-        Service.getPost(this.state.id).then(res => {
+        PostService.getPost(this.state.id).then(res => {
             this.setState({ post: res.data });
         })
     }
