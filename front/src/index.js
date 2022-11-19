@@ -23,7 +23,7 @@ root.render(
           <Route path="/index" render={(props) => <Index {...props} />} />
            <Route path="/post-detail/:id" render={(props) => <Post {...props} />} />
            <Route path="/myblog" render={(props) => <MyBlog {...props} />} />
-          <Route path='/create-post' component={WritePostPage}></Route>
+          <Route path='/create-post/:no' component={WritePostPage}></Route>
           <Redirect to="/myblog"/>
      </Switch>
    </BrowserRouter>
