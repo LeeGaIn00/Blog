@@ -77,7 +77,7 @@ class WritePostPage extends Component {
 
      /* 취소버튼 클릭 시 목록으로 이동 */
      cancel() {
-        this.props.history.push('/myblog');
+        this.props.history.push(`/myblog/${this.state.memberId}`);
     }
 
     render() {
