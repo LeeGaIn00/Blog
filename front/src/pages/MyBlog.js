@@ -30,7 +30,7 @@ class MyBlog extends Component {
     }
 
     createPost = () => {
-        this.props.history.push("/create-post/")
+        this.props.history.push("/create-post/_create")
     };
 
     /* 글 상세보기로 이동 */

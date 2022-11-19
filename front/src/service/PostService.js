@@ -12,9 +12,15 @@ class PostService {
     getPost(id) {
         return axios.get(POST_API_BASE_URL + "/" + id);
     }
-    /* 조회수 */ 
-    setCounts(id){
-        return axios.post(POST_API_BASE_URL + "/" + id, {}, { withCredentials: true });
+    // /* 조회수 */ 
+    // setCounts(id){
+    //     return axios.post(POST_API_BASE_URL + "/" + id, {}, { withCredentials: true });
+    // }
+    updatePost(no, post){
+        return axios.put(POST_API_BASE_URL + "/" + no, post);
+    }
+    deletePost(no){
+        return axios.delete(POST_API_BASE_URL + "/" + no);
     }
 }
 
