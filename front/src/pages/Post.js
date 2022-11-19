@@ -7,7 +7,9 @@ class Post extends Component {
         super(props);
 
         this.state ={
-            no: this.props.match.params.id,
+            id: this.props.location.state.id,
+            no: this.props.match.params.no,
+            membereId: this.props.location.id,
             post: {}
         }
     }
@@ -20,7 +22,10 @@ class Post extends Component {
     /* 글 수정으로 이동 */
     goToUpdate = (event) => {
         event.preventDefault();
-        this.props.history.push(`/create-post/${this.state.no}`);
+        this.props.history.push({
+            pathname: `/create-post/${this.state.no}`,
+            state: {id: this.state.id}
+        });
     }
 
      /* 글 삭제 */
@@ -29,7 +34,7 @@ class Post extends Component {
             PostService.deletePost(this.state.no).then(res => {
                 //console.log("delete result => " + JSON.stringify(res));
                 if (res.status == 200) {
-                    this.props.history.push('/myblog');
+                    this.props.history.push(`/myblog/${this.state.id}`);
                 } else {
                     alert("글 삭제가 실패했습니다.");
                 }
