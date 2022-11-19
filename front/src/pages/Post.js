@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import '../assets/css/post.css';
 import PostService from '../service/PostService.js';
 
+// components
+import MyBlogHeader from "../components/MyBlogHeader";
+
 class Post extends Component {
     constructor(props) {
         super(props);
@@ -9,7 +12,6 @@ class Post extends Component {
         this.state ={
             id: this.props.location.state.id,
             no: this.props.match.params.no,
-            membereId: this.props.location.id,
             post: {}
         }
     }
@@ -45,7 +47,8 @@ class Post extends Component {
     render() {
         return (
             <>
-                <div className='header'> H E A D E R </div>
+                {/* <div className='header'> H E A D E R </div> */}
+                <MyBlogHeader id={this.state.id} />
                 <div className='post-wrapper'> 
                     <div className='post-header'>
                         <h3 className='post-title'>
