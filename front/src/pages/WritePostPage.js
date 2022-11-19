@@ -15,7 +15,7 @@ class WritePostPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            memberId: "juhye",
+            memberId: this.props.location.state.id,
             text: '',
             title: '',
             views: 0
@@ -44,7 +44,7 @@ class WritePostPage extends Component {
         console.log("post => "+ JSON.stringify(post));
         // 글 생성
         PostService.createPost(post).then(res => {
-            this.props.history.push('/myblog');
+            this.props.history.push(`/myblog/${this.state.memberId}`);
         });
     }
 
@@ -52,7 +52,7 @@ class WritePostPage extends Component {
     render() {
         return (
             <div className="wr-main">
-                <MyBlogHeader/>
+                <MyBlogHeader id={this.state.memberId} />
                 <div className="wr-wrapper">
                     <div className='wr-title'>
                         <Input 

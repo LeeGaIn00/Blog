@@ -17,9 +17,9 @@ public class PostController {
     private PostService postService;
 
     // get all posts
-    @GetMapping("/post")
-    public List<Post> getAllPost() {
-        return postService.getAllPost();
+    @GetMapping("/posts/{id}")
+    public List<Post> getAllPost(@PathVariable String id) {
+        return postService.getAllPost(id);
     }
 
     // create post

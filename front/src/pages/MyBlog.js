@@ -13,24 +13,30 @@ import MyBlogHeader from "../components/MyBlogHeader";
 
 // service
 import PostService from '../service/PostService';
+import MemberService from '../service/MemberService';
 
 class MyBlog extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            id: this.props.match.params.id,
+            profile: '',
             posts: []
         }
 		this.createPost = this.createPost.bind(this);
     }
 
     componentDidMount() {
-        PostService.getAllPost().then((res) => {
-            this.setState({ posts: res.data});
+        PostService.getAllPost(this.state.id).then((res) => {
+            this.setState({ posts: res.data });
         });
     }
 
     createPost = () => {
-        this.props.history.push("/create-post/")
+        this.props.history.push({
+            pathname: "/create-post/",
+            state: {id: this.state.id}
+        })
     };
 
     /* 글 상세보기로 이동 */
@@ -43,7 +49,7 @@ class MyBlog extends Component {
     render() {
         return (
             <div className="mb-main">
-                <MyBlogHeader />
+                <MyBlogHeader id={this.state.id} />
                 <div className="search-bar">
                     <input type="search" placeholder="검색"/>
                     <FontAwesomeIcon icon={faMagnifyingGlass} className="btn-search"/>

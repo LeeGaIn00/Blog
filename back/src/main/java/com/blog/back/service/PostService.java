@@ -14,8 +14,8 @@ public class PostService {
     private PostRepository postRepository;
 
     // get all posts
-    public List<Post> getAllPost() {
-        return postRepository.findAll();
+    public List<Post> getAllPost(String id) {
+        return postRepository.findByMemberId(id);
     }
 
     // create post
