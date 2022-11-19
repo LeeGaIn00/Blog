@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import '../assets/css/post.css';
 import PostService from '../service/PostService.js';
 
+// components
+import MyBlogHeader from "../components/MyBlogHeader";
+
 class Post extends Component {
     constructor(props) {
         super(props);
 
         this.state ={
+            id: this.props.location.state.id,
             no: this.props.match.params.id,
             post: {}
         }
@@ -20,7 +24,10 @@ class Post extends Component {
     /* 글 수정으로 이동 */
     goToUpdate = (event) => {
         event.preventDefault();
-        this.props.history.push(`/create-post/${this.state.no}`);
+        this.props.history.push({
+            pathname: `/create-post/${this.state.no}`,
+            state: {id: this.state.id}
+        });
     }
 
      /* 글 삭제 */
@@ -29,7 +36,7 @@ class Post extends Component {
             PostService.deletePost(this.state.no).then(res => {
                 //console.log("delete result => " + JSON.stringify(res));
                 if (res.status == 200) {
-                    this.props.history.push('/myblog');
+                    this.props.history.push(`/myblog/${this.state.id}`);
                 } else {
                     alert("글 삭제가 실패했습니다.");
                 }
@@ -40,7 +47,8 @@ class Post extends Component {
     render() {
         return (
             <>
-                <div className='header'> H E A D E R </div>
+                {/* <div className='header'> H E A D E R </div> */}
+                <MyBlogHeader id={this.state.id} />
                 <div className='post-wrapper'> 
                     <div className='post-header'>
                         <h3 className='post-title'>
