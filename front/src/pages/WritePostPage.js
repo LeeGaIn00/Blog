@@ -15,8 +15,8 @@ class WritePostPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            memberId: this.props.location.state.id,
             no: this.props.match.params.no,
-            memberId: "dino",
             text: '',
             title: '',
             views: 0
@@ -65,12 +65,12 @@ class WritePostPage extends Component {
         if (this.state.no === '_create') {
             /* 새 글 생성 */
             PostService.createPost(post).then(res => {
-                this.props.history.push('/myblog');
+                this.props.history.push(`/myblog/${this.state.memberId}`);
             });
         } else {    
             /* 기존 글 수정 */
             PostService.updatePost(this.state.no, post).then(res => {
-                this.props.history.push('/myblog');
+                this.props.history.push(`/myblog/${this.state.memberId}`);
             });
         }
     }
@@ -83,7 +83,7 @@ class WritePostPage extends Component {
     render() {
         return (
             <div className="wr-main">
-                <MyBlogHeader/>
+                <MyBlogHeader id={this.state.memberId} />
                 <div className="wr-wrapper">
                     <div className='wr-title'>
                         <Input 

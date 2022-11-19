@@ -1,15 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
+// styles
+import "../assets/scss/header.scss";
+
+// components
 import HeaderNavs from "./HeaderNavs";
 
+// service
+import MemberService from '../service/MemberService';
+
+
 function MyBlogHeader(props) {
+    const [img, setImg] = useState();
+    const [id, setId] = useState();
+    const history = useHistory();
+
+    useEffect(() => {
+        MemberService.getProfile(props.id).then((res) => {
+            setImg(require(`../assets/${res.data}`));
+        })
+
+        setId(props.id);
+    }, []);
+
+    const moveToMain = () => {
+        history.push(`/myblog/${id}`);
+    };
+
     return (
         <div style={{
             borderBottom: "1px solid #aaa",
           }}>
             <HeaderNavs/>
-            <div>
-                누구누구의 블로그
+            <div className="hdr-wrap">
+                <span onClick={moveToMain}>
+                    <img
+                        className="profile"
+                        alt="profile"
+                        src={img}
+                    />
+                </span>
+                <span onClick={moveToMain}>{id}의 블로그</span>
             </div>
         </div>
     );
