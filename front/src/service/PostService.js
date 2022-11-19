@@ -9,8 +9,8 @@ class PostService {
     createPost(post) {
         return axios.post(POST_API_BASE_URL, post);
     }
-    getPost(id) {
-        return axios.get(POST_API_BASE_URL + "/" + id);
+    getPost(no) {
+        return axios.get(POST_API_BASE_URL + "/" + no);
     }
     // /* 조회수 */ 
     // setCounts(id){

@@ -11,7 +11,7 @@ class Post extends Component {
 
         this.state ={
             id: this.props.location.state.id,
-            no: this.props.match.params.id,
+            no: this.props.match.params.no,
             post: {}
         }
     }
