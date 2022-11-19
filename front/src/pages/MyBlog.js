@@ -34,7 +34,7 @@ class MyBlog extends Component {
 
     createPost = () => {
         this.props.history.push({
-            pathname: "/create-post/",
+            pathname: "/create-post/_create",
             state: {id: this.state.id}
         })
     };

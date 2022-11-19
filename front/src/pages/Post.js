@@ -7,14 +7,34 @@ class Post extends Component {
         super(props);
 
         this.state ={
-            id: this.props.match.params.id,
+            no: this.props.match.params.id,
             post: {}
         }
     }
     componentDidMount() {
-        PostService.getPost(this.state.id).then(res => {
+        PostService.getPost(this.state.no).then(res => {
             this.setState({ post: res.data });
         })
+    }
+
+    /* 글 수정으로 이동 */
+    goToUpdate = (event) => {
+        event.preventDefault();
+        this.props.history.push(`/create-post/${this.state.no}`);
+    }
+
+     /* 글 삭제 */
+     deleteView = async function () {
+        if (window.confirm("글을 삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다")) {
+            PostService.deletePost(this.state.no).then(res => {
+                //console.log("delete result => " + JSON.stringify(res));
+                if (res.status == 200) {
+                    this.props.history.push('/myblog');
+                } else {
+                    alert("글 삭제가 실패했습니다.");
+                }
+            });
+        }
     }
 
     render() {
@@ -38,10 +58,12 @@ class Post extends Component {
                     </div>
                     <br /><br />
                     <div className='post-btn'>
-                        <button className="post-btn-edit btn-round ml-1" color="info" type="button">
+                        <button className="post-btn-edit btn-round ml-1" color="info" type="button"
+                                onClick={this.goToUpdate}>
                             수정
                         </button>
-                        <button className="post-btn-cancel btn-round ml-1" color="info" type="button">
+                        <button className="post-btn-cancel btn-round ml-1" color="info" type="button"
+                                onClick={() => this.deleteView()}>
                             삭제
                         </button>
                     </div>

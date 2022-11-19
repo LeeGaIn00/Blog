@@ -1,12 +1,14 @@
 package com.blog.back.service;
 
+import com.blog.back.exception.ResourceNotFoundException;
 import com.blog.back.model.Post;
 import com.blog.back.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import javax.swing.text.html.Option;
+import java.util.*;
 
 @Service
 public class PostService {
@@ -27,5 +29,28 @@ public class PostService {
     public Optional<Post> getPost(Integer no) {
         Optional<Post> post = postRepository.findById(no);
         return post;
+    }
+
+    /* 게시글 수정 */
+    public ResponseEntity<Post> updatePost(Integer no, Post updatePost) {
+        Post post = postRepository.findById(no)
+                .orElseThrow(() -> new ResourceNotFoundException("Not exist Post Data by no : [" + no + "]"));
+        post.setTitle(updatePost.getTitle());
+        post.setText((updatePost.getText()));
+        post.setUpdatedTime(new Date());
+
+        Post endUpdatePosst = postRepository.save(post);
+        return ResponseEntity.ok(endUpdatePosst);
+    }
+
+    /* 게시글 삭제 */
+    public ResponseEntity<Map<String, Boolean>> deletePost(Integer no) {
+        Post post = postRepository.findById(no)
+                .orElseThrow(() -> new ResourceNotFoundException("Not exist Post Data by no : [" + no + "]"));
+
+        postRepository.delete(post);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("Deleted Post Data by id : [" + no + "]", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 }
