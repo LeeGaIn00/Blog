@@ -4,7 +4,6 @@ import com.blog.back.dto.PostDto;
 import com.blog.back.exception.ResourceNotFoundException;
 import com.blog.back.model.Post;
 import com.blog.back.repository.PostRepository;
-import com.blog.back.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,6 @@ import java.util.*;
 public class PostService {
     @Autowired
     private PostRepository postRepository;
-
-    @Autowired
-    private TagService tagService;
 
     /* 모든 게시글 불러오기 */
     public List<Post> getAllPost(String id) {
@@ -66,7 +62,7 @@ public class PostService {
 
     /* 조회수 증가 */
     @Transactional
-    public void updateView(Integer id) {
-        postRepository.updateView(id);
+    public void updateView(Integer no) {
+        postRepository.updateView(no);
     }
 }

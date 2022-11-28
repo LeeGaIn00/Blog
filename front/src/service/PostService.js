@@ -4,13 +4,13 @@ const POST_API_BASE_URL = "http://localhost:8080/post";
 
 class PostService {
     getAllPost(id) {
-        return axios.get(POST_API_BASE_URL + "s/" + id);
+        return axios.get(POST_API_BASE_URL + "/" + id);
     }
     createPost(data) {
         return axios.post(POST_API_BASE_URL, data);
     }
     getPost(no) {
-        return axios.get(POST_API_BASE_URL + "/" + no, { withCredentials: true });
+        return axios.get(POST_API_BASE_URL + "/detail/" + no, { withCredentials: true });
     }
     getSearchPost(search){
         return axios.get(POST_API_BASE_URL+"/search/?search=" + search);

@@ -18,7 +18,7 @@ public class Posttag {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_no")
     private Post post;
 
     @ManyToOne

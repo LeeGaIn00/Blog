@@ -130,7 +130,7 @@ class MyBlog extends Component {
                                 : this.state.posts.map (
                                     post =>
                                     <>
-                                        <tr onClick={() => this.readPost(post.id)}>
+                                        <tr onClick={() => this.readPost(post.no)}>
                                             <th scope="row" rowSpan={2}>
                                                 사진
                                             </th>
@@ -141,7 +141,7 @@ class MyBlog extends Component {
                                                 {post.createdTime.substring(0, 10)}
                                             </td>
                                         </tr>
-                                        <tr onClick={() => this.readPost(post.id)}>
+                                        <tr onClick={() => this.readPost(post.no)}>
                                             <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: post.text }} >
                                             </td>
                                         </tr>

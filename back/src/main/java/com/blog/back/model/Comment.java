@@ -17,8 +17,8 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "no")
+    private Integer no;
 
     @NonNull
     @Column(name = "text")
@@ -30,15 +30,9 @@ public class Comment {
     @Column(name="updated_time")
     private String updated_time;
 
-//    @Column(name="post_id")
-//    private Integer postId;
-//
-//    @Column(name="member_id")
-//    private String memberId;
-
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="post_id")
+    @JoinColumn(name="post_no")
     private Post post;
 
     @ManyToOne
@@ -47,7 +41,6 @@ public class Comment {
 
     public Comment(String text) {
         this.text= text;
-       // this.deleted = this.deleted == null ? false : this.deleted;
         this.created_time = this.created_time == null ? (new Timestamp(System.currentTimeMillis())).toString() : this.created_time;
     }
 

@@ -7,7 +7,7 @@ import { Button } from 'reactstrap';
 import MyBlogHeader from "../components/MyBlogHeader";
 
 // styles
-import '../assets/css/post.css';
+import '../assets/scss/post.scss';
 
 // service
 import PostService from '../service/PostService.js';
@@ -211,7 +211,7 @@ class Post extends Component {
                                 </div>
                                 <div className='post-comment-contents'>
                                     {!this.state.updating.now && <span className='post-comment-text'>{comment.text}</span> }
-                                    {this.state.updating.now && this.state.updating.commentNo === comment.id &&
+                                    {this.state.updating.now && this.state.updating.commentNo === comment.no &&
                                         <div className='post-updatecomment-wrapper'>
                                             <textarea
                                                 id='post-updatecomment'
@@ -222,20 +222,20 @@ class Post extends Component {
                                             </textarea>
                                             <div className='post-commentupdate-btn-wrapper'>
                                                 <Button className="post-commentupdate-btn btn-round ml-1" 
-                                                    onClick={() => this.updateComment(comment.id)}>
+                                                    onClick={() => this.updateComment(comment.no)}>
                                                     등록
                                                 </Button>
                                             </div>
                                         </div>
                                     }
-                                    {this.state.updating.now && this.state.updating.commentNo !== comment.id &&
+                                    {this.state.updating.now && this.state.updating.commentNo !== comment.no &&
                                         <span className='post-comment-text'>{comment.text}</span>
                                     }
                                 </div>
                                 {!this.state.updating.now &&
                                     <div className='post-comment-btn-wrapper'>
-                                        <Button className="post-comment-btn-edit" onClick={() => this.changeUpdating(comment.id)}>수정</Button>
-                                        <Button className="post-comment-btn-cancel" onClick={() => this.deleteComment(comment.id)}>삭제</Button>
+                                        <Button className="post-comment-btn-edit" onClick={() => this.changeUpdating(comment.no)}>수정</Button>
+                                        <Button className="post-comment-btn-cancel" onClick={() => this.deleteComment(comment.no)}>삭제</Button>
                                     </div>
                                 }
                             </div>

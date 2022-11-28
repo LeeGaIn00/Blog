@@ -35,7 +35,7 @@ class WritePostPage extends Component {
         } else {
             /* 수정 시 기존 글 내용 불러옴 */
             PostService.getPost(this.state.no).then(res => {
-                let post = res.data;
+                let post = res.data.post;
 
                 this.setState({
                     title: post.title,

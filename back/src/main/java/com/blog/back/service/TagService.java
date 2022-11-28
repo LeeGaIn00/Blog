@@ -40,7 +40,7 @@ public class TagService {
         posttagRepository.saveAll(posttags);
    }
 
-   public List<String> getTagsofPost(Integer postId) {
-        return posttagRepository.getTagsOfPost(postId);
+   public List<String> getTagsofPost(Integer postNo) {
+        return posttagRepository.getTagsOfPost(postNo);
    }
 }
