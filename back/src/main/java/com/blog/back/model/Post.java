@@ -1,11 +1,12 @@
 package com.blog.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Getter
@@ -33,9 +34,14 @@ public class Post {
     @Column(name = "updatedTime")
     private Date updatedTime;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post")
+    private List<Posttag> posttags = new ArrayList<>();
+
     @PrePersist
     public void prePersist(){
         this.createdTime = this.createdTime == null ? new Timestamp(System.currentTimeMillis()) : this.createdTime;
+        this.title = this.title == null ? "제목 없음" : this.title;
     }
 
     public String getCreatedTime() {

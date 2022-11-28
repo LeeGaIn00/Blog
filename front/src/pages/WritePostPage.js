@@ -3,10 +3,12 @@ import Editor from '../components/EditorComponent';
 import { Input, Button } from 'reactstrap';
 
 // styles
+import '../assets/scss/tagsinput.scss';
 import "../assets/scss/writepost.scss"
 
 // components
 import MyBlogHeader from "../components/MyBlogHeader";
+import TagsInput from "../components/TagsInput";
 
 // service
 import PostService from '../service/PostService';
@@ -19,7 +21,8 @@ class WritePostPage extends Component {
             no: this.props.match.params.no,
             text: '',
             title: '',
-            views: 0
+            views: 0,
+            tags: []
         }
         this.changeTextHandler = this.changeTextHandler.bind(this);
         this.changeTitleHandler = this.changeTitleHandler.bind(this);
@@ -33,12 +36,12 @@ class WritePostPage extends Component {
             /* 수정 시 기존 글 내용 불러옴 */
             PostService.getPost(this.state.no).then(res => {
                 let post = res.data;
-                //console.log("post => " + JSON.stringify(post));
 
                 this.setState({
                     title: post.title,
                     text: post.text,
-                    memberId: post.memberId
+                    memberId: post.memberId,
+                    views: post.views
                 });
             });
         }
@@ -52,19 +55,32 @@ class WritePostPage extends Component {
         this.setState({title: event.target.value});
     }
 
+    createdTags = (prop) => {
+        this.setState({tags: prop});
+    }
+
     createPost = (event) => {
         event.preventDefault();
+
         let post = {
             memberId: this.state.memberId,
             text: this.state.text,
             title: this.state.title,
             views: this.state.views
         };
+
+        let data = {
+            post: post,
+            tags: this.state.tags
+        }
+
         console.log("post => "+ JSON.stringify(post));
+        console.log("data => " + JSON.stringify(data));
+
         // // 글 생성
         if (this.state.no === '_create') {
             /* 새 글 생성 */
-            PostService.createPost(post).then(res => {
+            PostService.createPost(data).then(res => {
                 this.props.history.push(`/myblog/${this.state.memberId}`);
             });
         } else {    
@@ -87,17 +103,19 @@ class WritePostPage extends Component {
                 <div className="wr-wrapper">
                     <div className='wr-title'>
                         <Input 
-                            placeholder="제목을 입력해주세요" 
+                            placeholder="제목을 입력하세요" 
                             value={this.state.title}
                             onChange={this.changeTitleHandler}
                         />
                     </div>
-                    <div className="wr-ed">
+                    <hr/>
+                    <TagsInput createdTags={this.createdTags}/>
+                    {/* <div className="wr-ed"> */}
                         <Editor 
                             value={this.state.text}
                             onChange={this.changeTextHandler} 
                         />
-                    </div>
+                    {/* </div> */}
                     <div className="wr-btn">
                         <Button color="success" onClick={this.createPost}>작성</Button>
                         <Button color="danger" onClick={() => this.props.history.goBack()}>취소</Button>
