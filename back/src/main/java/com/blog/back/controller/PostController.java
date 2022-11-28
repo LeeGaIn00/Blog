@@ -58,6 +58,12 @@ public class PostController {
         return ResponseEntity.ok(postDto);
     }
 
+    /* 게시글 검색 */
+    @GetMapping("/post/search")
+    public List<Post> getSearchPost(@RequestParam(value = "search", required = false) String search) {
+        return postService.getPostByKeyword(search);
+    }
+    /* 게시글 수정 */
     @PutMapping("/post/{no}")
     public ResponseEntity<Post> updatePostByNo(@PathVariable Integer no, @RequestBody Post post) {
         return postService.updatePost(no, post);

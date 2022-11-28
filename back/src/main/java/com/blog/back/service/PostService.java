@@ -36,6 +36,11 @@ public class PostService {
         return post;
     }
 
+    /* 게시글 검색 */
+    public List<Post> getPostByKeyword(String search){
+        return postRepository.findPostByKeyword((search));
+    }
+
     /* 게시글 수정 */
     public ResponseEntity<Post> updatePost(Integer no, Post updatePost) {
         Post post = postRepository.findById(no)

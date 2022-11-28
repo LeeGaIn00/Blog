@@ -8,6 +8,63 @@
         padding-top: 20px;
         align-items: center;
         text-align: center;
+
+        input {
+            width: 200px;
+            padding-left: 5px;
+           // padding-right: 24px;
+            margin-right: 2px;
+            height: 28px;
+            border-radius: 10px;
+            -webkit-appearance: none;
+            text-align: left;
+            overflow: auto;
+            z-index: 1;
+            font-size: 15px;
+    
+            &::-webkit-search-cancel-button {
+                display:none
+            }
+    
+            // focus시 placeholder 안보이게
+            &:focus::-webkit-input-placeholder {
+                color: transparent;
+            }
+            &:focus::-moz-placeholder {
+                color: transparent;
+            }
+            &:focus:-ms-input-placeholder {
+                color: transparent;
+            }
+            &:focus::-ms-input-placeholder {
+                color: transparent;
+            }
+    
+            // placeholder 왼쪽 정렬
+            &::-webkit-input-placeholder {
+                text-align: left;
+            }
+        }
+
+        .btn-clear {
+            position: absolute;
+            vertical-align: middle;
+            padding: 0;
+            color: gray;
+            background: center center no-repeat;
+            //border: none;
+            z-index: 2;
+    
+            &:hover {
+                color: black;
+                background-color: transparent;
+            }
+
+            .removeIcon {
+                //margin-left: -70px;
+                top: 50%;
+            }
+        }
     }
     .mb-tb-wrap {
         margin: 80px 10% 0px 10%;
