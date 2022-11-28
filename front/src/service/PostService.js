@@ -6,19 +6,15 @@ class PostService {
     getAllPost(id) {
         return axios.get(POST_API_BASE_URL + "s/" + id);
     }
-    createPost(post) {
-        return axios.post(POST_API_BASE_URL, post);
+    createPost(data) {
+        return axios.post(POST_API_BASE_URL, data);
     }
     getPost(no) {
-        return axios.get(POST_API_BASE_URL + "/" + no);
+        return axios.get(POST_API_BASE_URL + "/" + no, { withCredentials: true });
     }
     getSearchPost(search){
         return axios.get(POST_API_BASE_URL+"/search/?search=" + search);
     }
-    // /* 조회수 */ 
-    // setCounts(id){
-    //     return axios.post(POST_API_BASE_URL + "/" + id, {}, { withCredentials: true });
-    // }
     updatePost(no, post){
         return axios.put(POST_API_BASE_URL + "/" + no, post);
     }

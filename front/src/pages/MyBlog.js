@@ -83,7 +83,7 @@ class MyBlog extends Component {
     /* 글 상세보기로 이동 */
     readPost(no) {
         /* 조회수 증가 */
-        PostService.getPost(no);
+        // PostService.getPost(no);
         this.props.history.push({
             pathname: `/post-detail/${no}`,
             state: {id: this.state.id}

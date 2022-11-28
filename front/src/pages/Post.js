@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import '../assets/scss/post.scss';
-import PostService from '../service/PostService.js';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'reactstrap';
 
 // components
 import MyBlogHeader from "../components/MyBlogHeader";
+
+// styles
+import '../assets/css/post.css';
+
+// service
+import PostService from '../service/PostService.js';
 
 class Post extends Component {
     constructor(props) {
@@ -14,6 +20,7 @@ class Post extends Component {
             id: this.props.location.state.id,
             no: this.props.match.params.no,
             post: {},
+            tags: [],
             comments: [],
             text: '',
             updating: {
@@ -25,7 +32,11 @@ class Post extends Component {
     }
     componentDidMount() {
         PostService.getPost(this.state.no).then(res => {
-            this.setState({ post: res.data });
+            console.log(res.data);
+            this.setState({ 
+                post: res.data.post,
+                tags: res.data.tags
+            });
         })
         PostService.getAllComment(this.state.no).then(res => {
             this.setState({ comments: res.data });
@@ -132,7 +143,6 @@ class Post extends Component {
     render() {
         return (
             <>
-                {/* <div className='header'> H E A D E R </div> */}
                 <MyBlogHeader id={this.state.id} />
                 <div className='post-wrapper'> 
                     <div className='post-header'>
@@ -142,10 +152,20 @@ class Post extends Component {
                         <span className='post-profile'></span>
                         <span className='post-nickname'>{this.state.post.memberId}</span>&nbsp;&nbsp;
                         <span className='post-date'>{this.state.post.createdTime}</span>
+                        <FontAwesomeIcon icon={faEye} /> 
                         <span className='post-views'>{this.state.post.views}</span>
                         <hr />
                     </div>
                     <div className='post-contents' dangerouslySetInnerHTML = {{ __html: this.state.post.text }} />
+                    <div className='post-tags'>
+                        <ul>
+                            {this.state.tags.map((tag, index) => (
+                                <li key={index}>
+                                    <span className="tag-title">#{tag}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                     <br /><br />
                     <div className='post-btn'>
                        {/* 작성자만 볼 수 있게 */}
