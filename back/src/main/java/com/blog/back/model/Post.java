@@ -14,9 +14,9 @@ import java.util.*;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer no;
 
-    @Column(name = "memberId")
+    @Column(name = "member_id")
     private String memberId;
 
     @Column(name = "title")
@@ -28,10 +28,10 @@ public class Post {
     @Column(name = "views")
     private Integer views;
 
-    @Column(name = "createdTime")
+    @Column(name = "created_time")
     private Date createdTime;
 
-    @Column(name = "updatedTime")
+    @Column(name = "updated_time")
     private Date updatedTime;
 
     @JsonIgnore

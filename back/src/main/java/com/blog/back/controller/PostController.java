@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("")
+@RequestMapping("/post")
 public class PostController {
 
     @Autowired
@@ -33,20 +33,20 @@ public class PostController {
     private TagService tagService;
 
     /* 모든 게시글 불러오기 */
-    @GetMapping("/posts/{id}")
+    @GetMapping("/{id}")
     public List<Post> getAllPost(@PathVariable String id) {
         return postService.getAllPost(id);
     }
 
     /* 게시글 생성 및 태그 저장 */
-    @PostMapping("/post")
+    @PostMapping("")
     public void createPost(@RequestBody PostDto postDto) {
         postService.createPost(postDto);
         tagService.createTag(postDto);
     }
 
     /* 게시글 상세 조회 */
-    @GetMapping("/post/{no}")
+    @GetMapping("/detail/{no}")
     public ResponseEntity<PostDto> getPostByNo(@PathVariable Integer no,
                                       HttpServletRequest request,
                                       HttpServletResponse response) {
@@ -59,18 +59,18 @@ public class PostController {
     }
 
     /* 게시글 검색 */
-    @GetMapping("/post/search")
+    @GetMapping("/search")
     public List<Post> getSearchPost(@RequestParam(value = "search", required = false) String search) {
         return postService.getPostByKeyword(search);
     }
     /* 게시글 수정 */
-    @PutMapping("/post/{no}")
+    @PutMapping("/{no}")
     public ResponseEntity<Post> updatePostByNo(@PathVariable Integer no, @RequestBody Post post) {
         return postService.updatePost(no, post);
     }
 
     /* 게시글 삭제 */
-    @DeleteMapping("/post/{no}")
+    @DeleteMapping("/{no}")
     public ResponseEntity<Map<String, Boolean>> deletePostByNo(
             @PathVariable Integer no){
         return postService.deletePost(no);
