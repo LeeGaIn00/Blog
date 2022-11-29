@@ -207,7 +207,9 @@ class Post extends Component {
                                 <hr />
                                 <div className='post-comment-header'>
                                     <span className='post-comment-name'>{comment.member.id}</span>&nbsp;&nbsp;
-                                    <span className='post-comment-date'>{comment.created_time.substring(0, 16)}</span>
+                                    {comment.updated_time === null ? 
+                                        <span className='post-comment-date'>{comment.created_time.substring(0, 16)}</span>
+                                        : <span className='post-comment-date'>{comment.updated_time.substring(0, 16)} <span className='post-comment-updatedmsg'>수정됨</span></span> }
                                 </div>
                                 <div className='post-comment-contents'>
                                     {!this.state.updating.now && <span className='post-comment-text'>{comment.text}</span> }
