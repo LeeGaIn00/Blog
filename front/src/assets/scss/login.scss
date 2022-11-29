@@ -1,0 +1,28 @@
+.body {
+    width: 100%;
+}
+
+.login-main {
+    
+    .container {
+        margin-top: 200px;
+    }
+
+    .card-register {
+        border: none;
+    }
+    .row {
+        justify-content: center;
+    }
+
+    .login-btn {
+        margin-top: 20px;
+    }
+
+    .signup-btn {
+        width: 100%;
+        margin-top: 10px;
+        background-color: rgb(158, 158, 158);
+        border-color: rgb(158, 158, 158);
+    }
+}
