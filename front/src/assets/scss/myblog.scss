@@ -10,6 +10,7 @@
         text-align: center;
 
         input {
+            position: relative;
             width: 200px;
             padding-left: 5px;
            // padding-right: 24px;
@@ -48,11 +49,12 @@
 
         .btn-clear {
             position: absolute;
+            left: 915px;
             vertical-align: middle;
             padding: 0;
             color: gray;
             background: center center no-repeat;
-            //border: none;
+            border: none;
             z-index: 2;
     
             &:hover {

@@ -49,21 +49,36 @@ class MyBlog extends Component {
     /* enter 입력 시 글 제목과 검색 결과 비교 & 필터링 */
     handleKeyPress = (e) => {
         if (e.key === "Enter") {
-            PostService.getSearchPost(this.state.searchInput).then((res) => {
+            {this.state.searchInput.startsWith("#") ? 
+            // Tag 검색
+            PostService.getSearchPostByTag(this.state.searchInput.substring(1)).then((res) => {
                 this.setState({
                     posts: res.data
                 })
-            });
+            })
+            : PostService.getSearchPost(this.state.searchInput).then((res) => {
+                this.setState({
+                    posts: res.data
+                })
+           }); } 
         }
     };
 
      /* 찾기 버튼 클릭 시 글 제목과 검색 결과 비교 & 필터링 */
      setSearchContent = (e) => { 
-       PostService.getSearchPost(this.state.searchInput).then((res) => {
-            this.setState({
-                posts: res.data
+        {this.state.searchInput.startsWith("#") ? 
+            // Tag 검색
+            PostService.getSearchPostByTag(this.state.searchInput.substring(1)).then((res) => {
+                this.setState({
+                    posts: res.data
+                })
             })
-       })
+            : PostService.getSearchPost(this.state.searchInput).then((res) => {
+                this.setState({
+                    posts: res.data
+                })
+           });
+        }
     }
 
     searchInputRemoveHandler = (e) => {
@@ -95,11 +110,6 @@ class MyBlog extends Component {
             <div className="mb-main">
                 <MyBlogHeader id={this.state.id} />
                 <div className="search-bar">
-                    {/* <input type="search" placeholder="검색"  onChange={this.setSearchContent} onKeyPress={this.handleKeyPress}/>
-                    <button className='search-btn' onClick={this.sestSearchContent}>
-                        <FontAwesomeIcon icon={faMagnifyingGlass} className="btn-search"/>
-                    </button> */}
-        
                     <input type="search" placeholder="검색" value={this.state.searchInput}
                         onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>
                         <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
@@ -124,10 +134,7 @@ class MyBlog extends Component {
                     </div>
                     <Table className="mb-tb" borderless>
                         <tbody>
-                            {
-                                this.state.posts.length === 0 ? 
-                                <div> 검색 결과가 없습니다. </div>
-                                : this.state.posts.map (
+                            { this.state.posts.map (
                                     post =>
                                     <>
                                         <tr onClick={() => this.readPost(post.no)}>
@@ -148,7 +155,6 @@ class MyBlog extends Component {
                                     </>
                                 )
                             }
-                            
                         </tbody>
                     </Table>
                 </div>
