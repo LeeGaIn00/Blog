@@ -15,6 +15,24 @@
         justify-content: center;
     }
 
+    .login-title {
+        text-align: center;
+    }
+
+    .login-group {
+        display: flex;
+        margin-top: 10px;
+
+        .login-icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-login {
+            margin-left: 10px;
+        }
+    }
+
     .login-btn {
         margin-top: 20px;
     }

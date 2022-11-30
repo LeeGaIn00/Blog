@@ -5,6 +5,9 @@ import { Button, Card, Form, Input, Container, Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFingerprint, faLock } from '@fortawesome/free-solid-svg-icons';
 
+// components
+import HeaderNav from "../components/HeaderNavs"; 
+
 // styles
 import '../assets/scss/login.scss';
 
