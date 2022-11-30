@@ -143,8 +143,8 @@ class Post extends Component {
     render() {
         return (
             <>
+            <MyBlogHeader id={this.state.id} />
             <div className='post-main'>
-                <MyBlogHeader id={this.state.id} />
                 <div className='post-wrapper'> 
                     <div className='post-header'>
                         <h3 className='post-title'>

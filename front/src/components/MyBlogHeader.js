@@ -29,9 +29,10 @@ function MyBlogHeader(props) {
     };
 
     return (
-        <div style={{
-            borderBottom: "1px solid #aaa",
-          }}>
+        <div className='hdr-main'
+            style={{
+                borderBottom: "1px solid #aaa",
+            }}>
             <HeaderNavs/>
             <div className="hdr-wrap">
                 <span onClick={moveToMain}>
