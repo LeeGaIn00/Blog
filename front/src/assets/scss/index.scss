@@ -68,4 +68,50 @@
             }
         }
     }
+
+    .index-tb-wrap {
+        margin: 30px 10% 0px 10%;
+        .index-tb-capt {
+            padding: 10px 0px;
+            span {
+                &:nth-child(1) {
+                    font-size: 25px;
+                    font-weight: bold;
+                }
+                &:nth-child(2) {
+                    float: right;
+                }
+            }
+        }
+        table {
+            border-bottom: 1px solid gray;
+            border-collapse: collapse;
+            vertical-align: middle;
+            th, td:not(.mb-tb-txt) {
+                border-top: 1px solid gray;
+            }
+            th {
+                padding-left: 15px;
+                width: 90px;
+            }
+            .index-tb-title {
+                padding-top: 15px;
+            }
+            .index-tb-txt {
+                padding-bottom: 15px;
+                p {
+                    margin-bottom: 0;
+                }
+            }
+            .index-tb-date {
+                text-align: end;
+            }
+            .profile {
+                height: 60px;
+                width: 60px;
+                border-radius: 60px;
+            }
+        }
+    }
+
 }

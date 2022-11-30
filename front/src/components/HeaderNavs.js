@@ -7,16 +7,16 @@ function HeaderNavs(props) {
             <Nav className="justify-content-end">
                 <NavItem>
                     <NavLink
-                    href="#"
+                    href="/register"
                     >
-                    내 블로그
+                    회원가입
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink
-                    href="#"
+                    href="/login"
                     >
-                    로그아웃
+                    로그인
                     </NavLink>
                 </NavItem>
             </Nav>

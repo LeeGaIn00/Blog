@@ -1,24 +1,16 @@
-.header {
-   display: flex;
-   justify-content: center;
-   font-size: larger;
-   align-items: center;
-   border: 1px solid black;
-   height: 100px;
+.post-main {
+    padding: 10px 20px 20px 20px; // 위 오 아 왼
+    margin: 10px 15%; // 세 가
 }
+.post-wrapper {
+//     margin: 50px auto;
+// //  //  margin-bottom: 30px;
+//     padding: auto;
+//     justify-content: center;
+//     justify-items: center;
+//     width: 700px;
+    margin: 80px 10% 0px 10%;
 
-
-body{
-   min-width: 1150px;
-
-}
-.post-wrapper{
-   margin: 50px auto;
- //  margin-bottom: 30px;
-   padding: auto;
-   justify-content: center;
-   justify-items: center;
-   width: 700px;
    
    .post-tags {
     display: flex;
@@ -62,13 +54,18 @@ body{
 }
 
 .post-comment-wrapper {
-    justify-content: center;
-    justify-items: center;
-    // margin-top: 20px;
-    // margin-bottom: 50px;
-    margin: 25px auto;
-    width: 700px;
+    // justify-content: center;
+    // justify-items: center;
+    // // margin-top: 20px;
+    // // margin-bottom: 50px;
+    // margin: 25px auto;
+    // width: 700px;
+    margin: 50px 10% 0px 10%;
 
+    .post-writecomment-wrapper {
+        width: 100%;
+    }
+    
     .post-comment {
         hr {
             margin-top: 14px;

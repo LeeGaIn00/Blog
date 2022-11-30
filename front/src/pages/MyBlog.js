@@ -135,24 +135,24 @@ class MyBlog extends Component {
                     <Table className="mb-tb" borderless>
                         <tbody>
                             { this.state.posts.map (
-                                    post =>
-                                    <>
-                                        <tr onClick={() => this.readPost(post.no)}>
-                                            <th scope="row" rowSpan={2}>
-                                                사진
-                                            </th>
-                                            <td className="mb-tb-title">
-                                                {post.title}
-                                            </td>
-                                            <td className="mb-tb-date" rowSpan={2}>
-                                                {post.createdTime.substring(0, 10)}
-                                            </td>
-                                        </tr>
-                                        <tr onClick={() => this.readPost(post.no)}>
-                                            <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: post.text }} >
-                                            </td>
-                                        </tr>
-                                    </>
+                                post =>
+                                <>
+                                    <tr onClick={() => this.readPost(post.no)}>
+                                        <th scope="row" rowSpan={2}>
+                                            사진
+                                        </th>
+                                        <td className="mb-tb-title">
+                                            {post.title}
+                                        </td>
+                                        <td className="mb-tb-date" rowSpan={2}>
+                                            {post.createdTime.substring(0, 10)}
+                                        </td>
+                                    </tr>
+                                    <tr onClick={() => this.readPost(post.no)}>
+                                        <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: post.text }} >
+                                        </td>
+                                    </tr>
+                                </>
                                 )
                             }
                         </tbody>
