@@ -107,58 +107,60 @@ class MyBlog extends Component {
 
     render() {
         return (
-            <div className="mb-main">
+            <>
                 <MyBlogHeader id={this.state.id} />
-                <div className="search-bar">
-                    <input type="search" placeholder="검색" value={this.state.searchInput}
-                        onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>
-                        <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
-                            <FontAwesomeIcon icon={faMagnifyingGlass} /> 
-                        </span>
-                    {this.state.searchInput.length !== 0 &&
-                        <button className="btn-clear" onClick={this.searchInputRemoveHandler}>
-                            <FontAwesomeIcon className="removeIcon" icon={faCircleXmark} />
-                        </button>
-                    }    
-                </div>
-                <div className="mb-tb-wrap">
-                    <div className="mb-tb-capt">
-                        <span>
-                            전체 글 목록
-                        </span>
-                        <span>
-                            <Button size="sm" onClick={this.createPost}>
-                                글 작성
-                            </Button>
-                        </span>
+                <div className="mb-main">
+                    <div className="search-bar">
+                        <input type="search" placeholder="검색" value={this.state.searchInput}
+                            onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>
+                            <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
+                                <FontAwesomeIcon icon={faMagnifyingGlass} /> 
+                            </span>
+                        {this.state.searchInput.length !== 0 &&
+                            <button className="btn-clear" onClick={this.searchInputRemoveHandler}>
+                                <FontAwesomeIcon className="removeIcon" icon={faCircleXmark} />
+                            </button>
+                        }    
                     </div>
-                    <Table className="mb-tb" borderless>
-                        <tbody>
-                            { this.state.posts.map (
-                                post =>
-                                <>
-                                    <tr onClick={() => this.readPost(post.no)}>
-                                        <th scope="row" rowSpan={2}>
-                                            사진
-                                        </th>
-                                        <td className="mb-tb-title">
-                                            {post.title}
-                                        </td>
-                                        <td className="mb-tb-date" rowSpan={2}>
-                                            {post.createdTime.substring(0, 10)}
-                                        </td>
-                                    </tr>
-                                    <tr onClick={() => this.readPost(post.no)}>
-                                        <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: post.text }} >
-                                        </td>
-                                    </tr>
-                                </>
-                                )
-                            }
-                        </tbody>
-                    </Table>
+                    <div className="mb-tb-wrap">
+                        <div className="mb-tb-capt">
+                            <span>
+                                전체 글 목록
+                            </span>
+                            <span>
+                                <Button size="sm" onClick={this.createPost}>
+                                    글 작성
+                                </Button>
+                            </span>
+                        </div>
+                        <Table className="mb-tb" borderless>
+                            <tbody>
+                                { this.state.posts.map (
+                                    post =>
+                                    <>
+                                        <tr onClick={() => this.readPost(post.no)}>
+                                            <th scope="row" rowSpan={2}>
+                                                사진
+                                            </th>
+                                            <td className="mb-tb-title">
+                                                {post.title}
+                                            </td>
+                                            <td className="mb-tb-date" rowSpan={2}>
+                                                {post.createdTime.substring(0, 10)}
+                                            </td>
+                                        </tr>
+                                        <tr onClick={() => this.readPost(post.no)}>
+                                            <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: post.text }} >
+                                            </td>
+                                        </tr>
+                                    </>
+                                    )
+                                }
+                            </tbody>
+                        </Table>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 }

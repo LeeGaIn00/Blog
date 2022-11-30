@@ -1,17 +1,22 @@
-.hdr-wrap {
-    padding-bottom: 30px;
-    span {
-        margin-right: 30px;
-        cursor: pointer;
-        .profile {
-            height: 120px;
-            width: 120px;
-            border-radius: 60px;
-            overflow: "hidden";
-        }
-        &:nth-child(2) {
-            font-size: xx-large;
-            vertical-align: -20%;
+.hdr-main {
+    padding: 10px 20px 20px 20px; // 위 오 아 왼
+    margin: 10px 15%; // 세 가
+    
+    .hdr-wrap {
+        padding-bottom: 30px;
+        span {
+            margin-right: 30px;
+            cursor: pointer;
+            .profile {
+                height: 120px;
+                width: 120px;
+                border-radius: 60px;
+                overflow: "hidden";
+            }
+            &:nth-child(2) {
+                font-size: xx-large;
+                vertical-align: -20%;
+            }
         }
     }
 }

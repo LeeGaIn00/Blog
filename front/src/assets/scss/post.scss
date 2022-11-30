@@ -9,8 +9,7 @@
 //     justify-content: center;
 //     justify-items: center;
 //     width: 700px;
-    margin: 80px 10% 0px 10%;
-
+    margin: 50px 10% 0px 10%;
    
    .post-tags {
     display: flex;
@@ -33,6 +32,7 @@
             }
         }
     }
+    
    .post-btn {
         text-align: right;
    }
@@ -54,12 +54,6 @@
 }
 
 .post-comment-wrapper {
-    // justify-content: center;
-    // justify-items: center;
-    // // margin-top: 20px;
-    // // margin-bottom: 50px;
-    // margin: 25px auto;
-    // width: 700px;
     margin: 50px 10% 0px 10%;
 
     .post-writecomment-wrapper {
@@ -223,6 +217,7 @@
 .post-gotolist-btn-wrapper{
     text-align: center;
     margin-bottom: 40px;
+    margin-top: 15px;
     .post-gotolist-btn{
         //background-color: #4A8451;
         border-color: #4A8451;
