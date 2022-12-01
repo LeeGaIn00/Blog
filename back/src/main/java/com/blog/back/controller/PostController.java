@@ -3,6 +3,7 @@ package com.blog.back.controller;
 import com.blog.back.dto.PostDto;
 import com.blog.back.exception.ResourceNotFoundException;
 import com.blog.back.model.Post;
+import com.blog.back.service.CommentService;
 import com.blog.back.service.PostService;
 import com.blog.back.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private TagService tagService;
@@ -81,6 +85,7 @@ public class PostController {
     public ResponseEntity<Map<String, Boolean>> deletePostByNo(
             @PathVariable Integer no){
         tagService.deleteTag(no);
+        commentService.deleteCommentByPostNo(no);
         return postService.deletePost(no);
     }
 
