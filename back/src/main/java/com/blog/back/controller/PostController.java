@@ -63,16 +63,19 @@ public class PostController {
     public List<Post> getSearchPost(@RequestParam(value = "search", required = false) String search) {
         return postService.getPostByKeyword(search);
     }
+
     /* 게시글 수정 */
     @PutMapping("/{no}")
-    public ResponseEntity<Post> updatePostByNo(@PathVariable Integer no, @RequestBody Post post) {
-        return postService.updatePost(no, post);
+    public void updatePostByNo(@PathVariable Integer no, @RequestBody PostDto postDto) {
+        postService.updatePost(no, postDto);
+        tagService.updateTag(no, postDto);
     }
 
     /* 게시글 삭제 */
     @DeleteMapping("/{no}")
     public ResponseEntity<Map<String, Boolean>> deletePostByNo(
             @PathVariable Integer no){
+        tagService.deleteTag(no);
         return postService.deletePost(no);
     }
 

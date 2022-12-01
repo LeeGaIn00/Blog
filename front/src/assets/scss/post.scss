@@ -13,37 +13,45 @@ body{
 
 }
 .post-wrapper{
-   margin: 50px auto;
+    margin: 50px auto;
  //  margin-bottom: 30px;
-   padding: auto;
-   justify-content: center;
-   justify-items: center;
-   width: 700px;
-   
-   .post-tags {
-    display: flex;
-    align-items: flex-start;
-    vertical-align: middle;
-    margin-top: 50px;
-        ul {
-            display: flex;
-            flex-wrap: wrap;
-            padding: 0;
-            margin: 0;
-            li {
-                display: flex;
-                text-align: center;
-                align-items: center;
-                justify-content: center;
-                list-style: none;
-                padding-right: 5px;
-                color: #95b4ee;
-            }
+    padding: auto;
+    justify-content: center;
+    justify-items: center;
+    width: 700px;
+    .post-views {
+        float: right;
+        color: gray;
+        .post-views-icon {
+            padding-right: 3px;
+            padding-bottom: 3px;
+            vertical-align: middle;
         }
     }
-   .post-btn {
+    .post-tags {
+        display: flex;
+        align-items: flex-start;
+        vertical-align: middle;
+        margin-top: 70px;
+            ul {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0;
+                margin: 0;
+                li {
+                    display: flex;
+                    text-align: center;
+                    align-items: center;
+                    justify-content: center;
+                    list-style: none;
+                    padding-right: 5px;
+                    color: #95b4ee;
+                }
+            }
+    }
+    .post-btn {
         text-align: right;
-   }
+    }
 }
 
 .post-title{

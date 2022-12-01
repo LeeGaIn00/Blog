@@ -10,4 +10,6 @@ import java.util.List;
 public interface PosttagRepository extends JpaRepository<Posttag, Integer> {
     @Query("SELECT p.tag.title from Posttag p where p.post.no=:postNo and p.id>0 order by p.id ASC")
     List<String> getTagsOfPost(@Param("postNo") Integer postNo);
+
+    List<Posttag> findByPostNo(@Param("postNo") Integer postNo);
 }

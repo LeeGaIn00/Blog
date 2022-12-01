@@ -38,15 +38,24 @@ public class PostService {
     }
 
     /* 게시글 수정 */
-    public ResponseEntity<Post> updatePost(Integer no, Post updatePost) {
+//    public ResponseEntity<Post> updatePost(Integer no, Post updatePost) {
+//        Post post = postRepository.findById(no)
+//                .orElseThrow(() -> new ResourceNotFoundException("Not exist Post Data by no : [" + no + "]"));
+//        post.setTitle(updatePost.getTitle());
+//        post.setText((updatePost.getText()));
+//        post.setUpdatedTime(new Date());
+//
+//        Post endUpdatePosst = postRepository.save(post);
+//        return ResponseEntity.ok(endUpdatePosst);
+//    }
+    public void updatePost(Integer no, PostDto postDto) {
         Post post = postRepository.findById(no)
                 .orElseThrow(() -> new ResourceNotFoundException("Not exist Post Data by no : [" + no + "]"));
-        post.setTitle(updatePost.getTitle());
-        post.setText((updatePost.getText()));
+        post.setTitle(postDto.getPost().getTitle());
+        post.setText(postDto.getPost().getText());
         post.setUpdatedTime(new Date());
 
         Post endUpdatePosst = postRepository.save(post);
-        return ResponseEntity.ok(endUpdatePosst);
     }
 
     /* 게시글 삭제 */

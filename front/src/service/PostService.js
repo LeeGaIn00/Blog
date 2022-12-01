@@ -15,8 +15,8 @@ class PostService {
     getSearchPost(search){
         return axios.get(POST_API_BASE_URL+"/search/?search=" + search);
     }
-    updatePost(no, post){
-        return axios.put(POST_API_BASE_URL + "/" + no, post);
+    updatePost(no, data){
+        return axios.put(POST_API_BASE_URL + "/" + no, data);
     }
     deletePost(no){
         return axios.delete(POST_API_BASE_URL + "/" + no);
