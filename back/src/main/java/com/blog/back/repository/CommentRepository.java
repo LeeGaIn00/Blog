@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-
-    String sql = "SELECT c from Comment c where c.post.no=:postNo";
-
-    @Query(sql)
+    @Query("SELECT c from Comment c where c.post.no=:postNo")
     public List<Comment> findComment(@Param("postNo") Integer postNo);
 }

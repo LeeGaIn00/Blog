@@ -64,4 +64,8 @@ public class CommentService {
         commentRepository.deleteById(commentNo);
         return commentRepository.findComment(postNo);
     }
+
+    public void deleteCommentByPostNo(Integer no) {
+        commentRepository.deleteAllInBatch(commentRepository.findComment(no));
+    }
 }
