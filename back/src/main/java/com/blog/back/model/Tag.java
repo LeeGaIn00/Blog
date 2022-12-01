@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,11 +25,19 @@ public class Tag {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "created_time")
+    private Date createdTime;
+
     @JsonIgnore
     @OneToMany(mappedBy = "tag")
     private List<Posttag> posttags = new ArrayList<>();
 
     public Tag(String title) {
         this.title = title;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        this.createdTime = this.createdTime == null ? new Timestamp(System.currentTimeMillis()) : this.createdTime;
     }
 }

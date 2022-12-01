@@ -42,7 +42,7 @@ class Post extends Component {
             this.setState({ comments: res.data });
             console.log(res.data);
         })
-
+        window.scrollTo(0, 0);
         document.querySelector('.post-comment-btn').disabled = true;
     }
 
@@ -153,8 +153,10 @@ class Post extends Component {
                         <span className='post-profile'></span>
                         <span className='post-nickname'>{this.state.post.memberId}</span>&nbsp;&nbsp;
                         <span className='post-date'>{this.state.post.createdTime}</span>
-                        <FontAwesomeIcon icon={faEye} /> 
-                        <span className='post-views'>{this.state.post.views}</span>
+                        <span className='post-views'>
+                            <FontAwesomeIcon icon={faEye} className='post-views-icon'/> 
+                            {this.state.post.views}
+                        </span>
                         <hr />
                     </div>
                     <div className='post-contents' dangerouslySetInnerHTML = {{ __html: this.state.post.text }} />
@@ -167,7 +169,7 @@ class Post extends Component {
                             ))}
                         </ul>
                     </div>
-                    <br /><br />
+                    <br />
                     <div className='post-btn'>
                        {/* 작성자만 볼 수 있게 */}
                         <Button size='sm' 

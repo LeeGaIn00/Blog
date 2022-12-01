@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Form, FormFeedback } from 'reactstrap';
 
 const TagsInput = (props) => {
     const [tags, setTags] = useState([]);
     const [validate, setValidate] = useState();
+
+    useEffect(() => {
+        console.log("useEffect 호출");
+        if(props.tags.length > 0)
+            setTags(props.tags);
+    }, []);
 
     const addTag = (e) => {
         const tagRex = /^[^ !@#$%^&*(),.?":{}|<>]*$/gi; // 해시태그 정규표현식 (특수문자,공백 제외)

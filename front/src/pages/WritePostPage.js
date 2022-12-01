@@ -22,26 +22,30 @@ class WritePostPage extends Component {
             text: '',
             title: '',
             views: 0,
-            tags: []
+            tags: [],
+            isLoading: true
         }
         this.changeTextHandler = this.changeTextHandler.bind(this);
         this.changeTitleHandler = this.changeTitleHandler.bind(this);
         this.createPost = this.createPost.bind(this);
     }
 
-     componentDidMount() {
+    async componentDidMount() {
         if (this.state.no === '_create') {
+            this.setState({isLoading: false})
             return;
         } else {
             /* 수정 시 기존 글 내용 불러옴 */
-            PostService.getPost(this.state.no).then(res => {
+            await PostService.getPost(this.state.no).then(res => {
                 let post = res.data.post;
 
                 this.setState({
                     title: post.title,
                     text: post.text,
                     memberId: post.memberId,
-                    views: post.views
+                    views: post.views,
+                    tags: res.data.tags,
+                    isLoading: false
                 });
             });
         }
@@ -56,6 +60,7 @@ class WritePostPage extends Component {
     }
 
     createdTags = (prop) => {
+        console.log("createdTags prop => " + prop);
         this.setState({tags: prop});
     }
 
@@ -85,7 +90,7 @@ class WritePostPage extends Component {
             });
         } else {    
             /* 기존 글 수정 */
-            PostService.updatePost(this.state.no, post).then(res => {
+            PostService.updatePost(this.state.no, data).then(res => {
                 this.props.history.push(`/myblog/${this.state.memberId}`);
             });
         }
@@ -97,6 +102,9 @@ class WritePostPage extends Component {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return null
+        }
         return (
             <div className="wr-main">
                 <MyBlogHeader id={this.state.memberId} />
@@ -109,7 +117,7 @@ class WritePostPage extends Component {
                         />
                     </div>
                     <hr/>
-                    <TagsInput createdTags={this.createdTags}/>
+                    <TagsInput createdTags={this.createdTags} tags={this.state.tags}/>
                     {/* <div className="wr-ed"> */}
                         <Editor 
                             value={this.state.text}
