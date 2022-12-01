@@ -28,6 +28,7 @@ root.render(
           <Route path='/create-post/:no' component={WritePostPage}></Route>
           <Route path='/register' render={(props) => <Register {...props} />} />
           <Route path='/login' render={(props) => <Login {...props} />} />
+          <Redirect to="/index" />
      </Switch>
    </BrowserRouter>
   </>
