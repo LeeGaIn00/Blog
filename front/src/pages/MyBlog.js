@@ -49,21 +49,36 @@ class MyBlog extends Component {
     /* enter 입력 시 글 제목과 검색 결과 비교 & 필터링 */
     handleKeyPress = (e) => {
         if (e.key === "Enter") {
-            PostService.getSearchPost(this.state.searchInput).then((res) => {
+            {this.state.searchInput.startsWith("#") ? 
+            // Tag 검색
+            PostService.getSearchPostByTag(this.state.searchInput.substring(1)).then((res) => {
                 this.setState({
                     posts: res.data
                 })
-            });
+            })
+            : PostService.getSearchPost(this.state.searchInput).then((res) => {
+                this.setState({
+                    posts: res.data
+                })
+           }); } 
         }
     };
 
      /* 찾기 버튼 클릭 시 글 제목과 검색 결과 비교 & 필터링 */
      setSearchContent = (e) => { 
-       PostService.getSearchPost(this.state.searchInput).then((res) => {
-            this.setState({
-                posts: res.data
+        {this.state.searchInput.startsWith("#") ? 
+            // Tag 검색
+            PostService.getSearchPostByTag(this.state.searchInput.substring(1)).then((res) => {
+                this.setState({
+                    posts: res.data
+                })
             })
-       })
+            : PostService.getSearchPost(this.state.searchInput).then((res) => {
+                this.setState({
+                    posts: res.data
+                })
+           });
+        }
     }
 
     searchInputRemoveHandler = (e) => {
@@ -92,42 +107,35 @@ class MyBlog extends Component {
 
     render() {
         return (
-            <div className="mb-main">
+            <>
                 <MyBlogHeader id={this.state.id} />
-                <div className="search-bar">
-                    {/* <input type="search" placeholder="검색"  onChange={this.setSearchContent} onKeyPress={this.handleKeyPress}/>
-                    <button className='search-btn' onClick={this.sestSearchContent}>
-                        <FontAwesomeIcon icon={faMagnifyingGlass} className="btn-search"/>
-                    </button> */}
-        
-                    <input type="search" placeholder="검색" value={this.state.searchInput}
-                        onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>
-                        <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
-                            <FontAwesomeIcon icon={faMagnifyingGlass} /> 
-                        </span>
-                    {this.state.searchInput.length !== 0 &&
-                        <button className="btn-clear" onClick={this.searchInputRemoveHandler}>
-                            <FontAwesomeIcon className="removeIcon" icon={faCircleXmark} />
-                        </button>
-                    }    
-                </div>
-                <div className="mb-tb-wrap">
-                    <div className="mb-tb-capt">
-                        <span>
-                            전체 글 목록
-                        </span>
-                        <span>
-                            <Button size="sm" onClick={this.createPost}>
-                                글 작성
-                            </Button>
-                        </span>
+                <div className="mb-main">
+                    <div className="search-bar">
+                        <input type="search" placeholder="검색" value={this.state.searchInput}
+                            onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>
+                            <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
+                                <FontAwesomeIcon icon={faMagnifyingGlass} /> 
+                            </span>
+                        {this.state.searchInput.length !== 0 &&
+                            <button className="btn-clear" onClick={this.searchInputRemoveHandler}>
+                                <FontAwesomeIcon className="removeIcon" icon={faCircleXmark} />
+                            </button>
+                        }    
                     </div>
-                    <Table className="mb-tb" borderless>
-                        <tbody>
-                            {
-                                this.state.posts.length === 0 ? 
-                                <div> 검색 결과가 없습니다. </div>
-                                : this.state.posts.map (
+                    <div className="mb-tb-wrap">
+                        <div className="mb-tb-capt">
+                            <span>
+                                전체 글 목록
+                            </span>
+                            <span>
+                                <Button size="sm" onClick={this.createPost}>
+                                    글 작성
+                                </Button>
+                            </span>
+                        </div>
+                        <Table className="mb-tb" borderless>
+                            <tbody>
+                                { this.state.posts.map (
                                     post =>
                                     <>
                                         <tr onClick={() => this.readPost(post.no)}>
@@ -146,13 +154,13 @@ class MyBlog extends Component {
                                             </td>
                                         </tr>
                                     </>
-                                )
-                            }
-                            
-                        </tbody>
-                    </Table>
+                                    )
+                                }
+                            </tbody>
+                        </Table>
+                    </div>
                 </div>
-            </div>
+            </>
         );
     }
 }

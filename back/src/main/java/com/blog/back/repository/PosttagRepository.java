@@ -12,4 +12,7 @@ public interface PosttagRepository extends JpaRepository<Posttag, Integer> {
     List<String> getTagsOfPost(@Param("postNo") Integer postNo);
 
     List<Posttag> findByPostNo(@Param("postNo") Integer postNo);
+
+    @Query("SELECT p.post.no from Posttag p where p.tag.id=:tagId order by p.post.no ASC")
+    List<Integer> getPostNoByTagId(@Param("tagId") Integer tagId);
 }

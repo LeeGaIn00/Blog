@@ -6,7 +6,6 @@ import com.blog.back.model.Post;
 import com.blog.back.service.PostService;
 import com.blog.back.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,6 +61,12 @@ public class PostController {
     @GetMapping("/search")
     public List<Post> getSearchPost(@RequestParam(value = "search", required = false) String search) {
         return postService.getPostByKeyword(search);
+    }
+    
+    /* 태그 검색 */
+    @GetMapping("/searchtag")
+    public List<Optional<Post>> getSearchPostByTag(@RequestParam(value = "tag", required = false) String tag) {
+        return postService.getPostByTag(tag);
     }
 
     /* 게시글 수정 */

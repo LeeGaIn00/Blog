@@ -15,6 +15,9 @@ class PostService {
     getSearchPost(search){
         return axios.get(POST_API_BASE_URL+"/search/?search=" + search);
     }
+    getSearchPostByTag(tag){
+        return axios.get(POST_API_BASE_URL+"/searchtag/?tag=" + tag);
+    }
     updatePost(no, data){
         return axios.put(POST_API_BASE_URL + "/" + no, data);
     }

@@ -1,25 +1,17 @@
-.header {
-   display: flex;
-   justify-content: center;
-   font-size: larger;
-   align-items: center;
-   border: 1px solid black;
-   height: 100px;
+.post-main {
+    padding: 10px 20px 20px 20px; // 위 오 아 왼
+    margin: 10px 15%; // 세 가
 }
 
-
-body{
-   min-width: 1150px;
-
-}
-.post-wrapper{
-    margin: 50px auto;
- //  margin-bottom: 30px;
-    padding: auto;
-    justify-content: center;
-    justify-items: center;
-    width: 700px;
-    .post-views {
+.post-wrapper {
+//     margin: 50px auto;
+// //  //  margin-bottom: 30px;
+//     padding: auto;
+//     justify-content: center;
+//     justify-items: center;
+//     width: 700px;
+    margin: 50px 10% 0px 10%;
+   .post-views {
         float: right;
         color: gray;
         .post-views-icon {
@@ -28,12 +20,17 @@ body{
             vertical-align: middle;
         }
     }
-    .post-tags {
+   .post-tags {
         display: flex;
         align-items: flex-start;
         vertical-align: middle;
         margin-top: 70px;
-            ul {
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+            margin: 0;
+            li {
                 display: flex;
                 flex-wrap: wrap;
                 padding: 0;
@@ -70,13 +67,12 @@ body{
 }
 
 .post-comment-wrapper {
-    justify-content: center;
-    justify-items: center;
-    // margin-top: 20px;
-    // margin-bottom: 50px;
-    margin: 25px auto;
-    width: 700px;
+    margin: 50px 10% 0px 10%;
 
+    .post-writecomment-wrapper {
+        width: 100%;
+    }
+    
     .post-comment {
         hr {
             margin-top: 14px;
@@ -95,6 +91,10 @@ body{
             .post-comment-date {
                 color: rgb(151, 149, 149);
                 font-size: 14px;
+
+                .post-comment-updatedmsg {
+                    font-size: 12px;
+                }
             }
         }
 
@@ -230,6 +230,7 @@ body{
 .post-gotolist-btn-wrapper{
     text-align: center;
     margin-bottom: 40px;
+    margin-top: 15px;
     .post-gotolist-btn{
         //background-color: #4A8451;
         border-color: #4A8451;

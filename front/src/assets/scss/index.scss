@@ -1,4 +1,4 @@
-.mb-main {
+.main-wrapper {
     padding: 10px 20px 20px 20px; // 위 오 아 왼
     margin: 10px 15%; // 세 가
 
@@ -68,9 +68,10 @@
             }
         }
     }
-    .mb-tb-wrap {
-        margin: 50px 10% 0px 10%;
-        .mb-tb-capt {
+
+    .index-tb-wrap {
+        margin: 30px 10% 0px 10%;
+        .index-tb-capt {
             padding: 10px 0px;
             span {
                 &:nth-child(1) {
@@ -90,19 +91,25 @@
                 border-top: 1px solid gray;
             }
             th {
-                text-align: center;
+                padding-left: 15px;
+                width: 90px;
             }
-            .mb-tb-title {
+            .index-tb-title {
                 padding-top: 15px;
             }
-            .mb-tb-txt {
+            .index-tb-txt {
                 padding-bottom: 15px;
                 p {
                     margin-bottom: 0;
                 }
             }
-            .mb-tb-date {
+            .index-tb-date {
                 text-align: end;
+            }
+            .profile {
+                height: 60px;
+                width: 60px;
+                border-radius: 60px;
             }
         }
     }

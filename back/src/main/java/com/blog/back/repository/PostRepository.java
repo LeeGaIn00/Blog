@@ -15,10 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     void updateView(Integer no);
     
     /* 게시글 검색 */
-    public String SELECT_SEARCH_POST = "SELECT * FROM post " +
-            "WHERE title LIKE %:search% or text LIKE %:search% ORDER BY no DESC";
-
-    @Query(value = SELECT_SEARCH_POST, nativeQuery = true)
+    @Query("SELECT p FROM Post p WHERE p.title LIKE %:search% or p.text LIKE %:search% ORDER BY p.no DESC")
     List<Post> findPostByKeyword(final String search);
-
 }

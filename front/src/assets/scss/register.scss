@@ -1,0 +1,32 @@
+.body {
+    width: 100%;
+}
+
+.register-wrapper {
+    padding: 10px 20px 20px 20px; 
+    margin: 50px 15%; 
+
+    .register-main {
+        display: block;
+        margin: 0 auto;
+        max-width: 400px;
+        min-width: 200px;
+
+        .register-title {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .card-register {
+            border: none;
+
+            .register-group {
+                margin-bottom: 20px;
+            }
+        }
+
+        .register-btn {
+            margin-top: 40px;
+        } 
+    }
+}

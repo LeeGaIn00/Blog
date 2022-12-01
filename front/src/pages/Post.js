@@ -143,7 +143,8 @@ class Post extends Component {
     render() {
         return (
             <>
-                <MyBlogHeader id={this.state.id} />
+            <MyBlogHeader id={this.state.id} />
+            <div className='post-main'>
                 <div className='post-wrapper'> 
                     <div className='post-header'>
                         <h3 className='post-title'>
@@ -184,32 +185,34 @@ class Post extends Component {
                 </div>
                 
                 {/* comment */}
-                <div className='post-writecomment-wrapper'>
-                    <span className='post-writecomment-name'></span>
-                    <textarea
-                        id='post-writecomment'
-                        placeholder='불쾌감을 주는 욕설과 악플은 삭제될 수 있습니다.'
-                        onChange={this.changeTextHandler} 
-                        onKeyUp={this.checkValid}
-                        >
-                    </textarea>
-                    <div className='post-commentwrite-btn-wrapper'>
-                        {/* 로그인 한 사용자만 작성 가능하게 */}
-                        <Button size='sm' className='post-comment-btn'
-                            onClick={() => this.createComment()}
-                           >
-                            등록
-                        </Button>
-                    </div>
-                </div>
                 <div className='post-comment-wrapper'>
+                    <div className='post-writecomment-wrapper'>
+                        <span className='post-writecomment-name'></span>
+                        <textarea
+                            id='post-writecomment'
+                            placeholder='불쾌감을 주는 욕설과 악플은 삭제될 수 있습니다.'
+                            onChange={this.changeTextHandler} 
+                            onKeyUp={this.checkValid}
+                            >
+                        </textarea>
+                        <div className='post-commentwrite-btn-wrapper'>
+                            {/* 로그인 한 사용자만 작성 가능하게 */}
+                            <Button size='sm' className='post-comment-btn'
+                                onClick={() => this.createComment()}
+                            >
+                                등록
+                            </Button>
+                        </div>
+                    </div>
                     {
                         this.state.comments.map((comment) => (
                             <div className='post-comment'>
                                 <hr />
                                 <div className='post-comment-header'>
                                     <span className='post-comment-name'>{comment.member.id}</span>&nbsp;&nbsp;
-                                    <span className='post-comment-date'>{comment.created_time.substring(0, 16)}</span>
+                                    {comment.updated_time === null ? 
+                                        <span className='post-comment-date'>{comment.created_time.substring(0, 16)}</span>
+                                        : <span className='post-comment-date'>{comment.updated_time.substring(0, 16)} <span className='post-comment-updatedmsg'>수정됨</span></span> }
                                 </div>
                                 <div className='post-comment-contents'>
                                     {!this.state.updating.now && <span className='post-comment-text'>{comment.text}</span> }
@@ -250,7 +253,7 @@ class Post extends Component {
                             목록
                         </Button>
                     </div>
-                
+            </div>  
             </>
         );
     }

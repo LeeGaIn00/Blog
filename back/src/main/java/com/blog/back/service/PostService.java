@@ -3,7 +3,10 @@ package com.blog.back.service;
 import com.blog.back.dto.PostDto;
 import com.blog.back.exception.ResourceNotFoundException;
 import com.blog.back.model.Post;
+import com.blog.back.model.Tag;
 import com.blog.back.repository.PostRepository;
+import com.blog.back.repository.PosttagRepository;
+import com.blog.back.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,12 @@ import java.util.*;
 public class PostService {
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
+    private PosttagRepository posttagRepository;
 
     /* 모든 게시글 불러오기 */
     public List<Post> getAllPost(String id) {
@@ -33,8 +42,20 @@ public class PostService {
     }
 
     /* 게시글 검색 */
-    public List<Post> getPostByKeyword(String search){
-        return postRepository.findPostByKeyword((search));
+    public List<Post> getPostByKeyword(String search) {
+        return postRepository.findPostByKeyword(search);
+    }
+
+    /* 태그 검색 */
+    public List<Optional<Post>> getPostByTag(String tag) {
+        List<Optional<Post>> list = new ArrayList<>();
+
+        Integer tagId = tagRepository.findByTitle(tag).getId();
+        List<Integer> postNoList = posttagRepository.getPostNoByTagId(tagId);
+
+        for(Integer no:postNoList)
+            list.add(postRepository.findById(no));
+        return list;
     }
 
     /* 게시글 수정 */
