@@ -1,6 +1,27 @@
 .mb-main {
     padding: 10px 20px 20px 20px; // 위 오 아 왼
     margin: 10px 15%; // 세 가
+    min-width: 700px;
+
+    .mb-cate {
+        text-align: center;
+
+        .btn {
+            margin: 0 20px 0 20px;
+            font-size: 14px;
+            border: none;
+    
+            &:focus,
+            &.active{
+                border-bottom: 2px solid black;
+                border-radius: 0;
+                font-weight: 600;
+            }
+            &:hover {
+                font-weight: 600;
+            }
+        }
+    }
 
     .search-bar {
         display: flex;
@@ -69,7 +90,7 @@
         }
     }
     .mb-tb-wrap {
-        margin: 50px 10% 0px 10%;
+        margin: 40px 10% 0px 10%;
         .mb-tb-capt {
             padding: 10px 0px;
             span {

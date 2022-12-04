@@ -25,6 +25,9 @@ public class Post {
     @Column(name = "text")
     private String text;
 
+    @Column(name = "category")
+    private String category;
+
     @Column(name = "views")
     private Integer views;
 

@@ -15,6 +15,16 @@ import MyBlogHeader from "../components/MyBlogHeader";
 import PostService from '../service/PostService';
 import MemberService from '../service/MemberService';
 
+const cateData = {
+    cat0 : '전체',
+    cat1 : '일상',
+    cat2 : '여행',
+    cat3 : '취미',
+    cat4 : '게임'
+}
+
+let selectCate;
+
 class MyBlog extends Component {
     constructor(props) {
         super(props);
@@ -25,16 +35,21 @@ class MyBlog extends Component {
             id: this.props.match.params.id,
             profile: '',
             posts: [],
-            orgPosts: []
+            orgPosts: [],
+            curCate: cateData['cat0']
         }
 		this.createPost = this.createPost.bind(this);
     }
 
     componentDidMount() {
+        // member 별로 curCate 구분하기 위해 id 붙여서 session에 저장
+        selectCate = sessionStorage.getItem("curCate"+"_"+this.state.id) == null ? cateData['cat0'] : JSON.parse(sessionStorage.getItem("curCate"+"_"+this.state.id));
+
         PostService.getAllPost(this.state.id).then((res) => {
             this.setState({ 
                 posts: res.data,
-                orgPosts: res.data  
+                orgPosts: res.data,
+                curCate: selectCate
             });
         });
     }
@@ -105,11 +120,63 @@ class MyBlog extends Component {
         });
     }
 
+     /* 카테고리 onClick 이벤트. 카테고리 변경 및 sessionStorage에 state 저장 */
+     changeCate = (e) => {
+        this.setState({
+            curCate: e.target.textContent,
+            searchInput: ''
+        
+        });
+        sessionStorage.setItem("curCate"+"_"+this.state.id, JSON.stringify(e.target.textContent));
+    };
+
     render() {
         return (
             <>
                 <MyBlogHeader id={this.state.id} />
                 <div className="mb-main">
+                    <div className="mb-cate">
+                        <button 
+                            id="cat0" 
+                            type="button" 
+                            className={`ml-1 btn ${this.state.curCate === cateData['cat0'] ? 'active' : ''}`}
+                            onClick = {this.changeCate}
+                        >
+                            {cateData['cat0']}
+                        </button>
+                        <button 
+                            id="cat1" 
+                            type="button" 
+                            className={`ml-1 btn ${this.state.curCate === cateData['cat1'] ? 'active' : ''}`}
+                            onClick = {this.changeCate}
+                        >
+                            {cateData['cat1']}
+                        </button>
+                        <button 
+                            id="cat2" 
+                            type="button" 
+                            className={`ml-1 btn ${this.state.curCate === cateData['cat2'] ? 'active' : ''}`}
+                            onClick = {this.changeCate}
+                        >
+                            {cateData['cat2']}
+                        </button>
+                        <button 
+                            id="cat3" 
+                            type="button" 
+                            className={`ml-1 btn ${this.state.curCate === cateData['cat3'] ? 'active' : ''}`}
+                            onClick = {this.changeCate}
+                        >
+                            {cateData['cat3']}
+                        </button>
+                        <button 
+                            id="cat4" 
+                            type="button" 
+                            className={`ml-1 btn ${this.state.curCate === cateData['cat4'] ? 'active' : ''}`}
+                            onClick = {this.changeCate}
+                        >
+                            {cateData['cat4']}
+                        </button>
+                    </div>
                     <div className="search-bar">
                         <input type="search" placeholder="검색" value={this.state.searchInput}
                             onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>

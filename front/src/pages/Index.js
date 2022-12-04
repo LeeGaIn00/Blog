@@ -23,6 +23,12 @@ class Index extends Component {
     }
 
     componentDidMount() {
+      // category관련 sessionStorage 삭제
+      Object.keys(sessionStorage).filter(x => 
+        { sessionStorage.key(x).startsWith('curCate') &&
+        sessionStorage.removeItem(x) }
+      );
+
       MemberService.getAllMember().then((res) => {
         this.setState({
           members: res.data
