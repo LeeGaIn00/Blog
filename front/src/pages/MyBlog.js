@@ -43,9 +43,9 @@ class MyBlog extends Component {
 
     componentDidMount() {
         // member 별로 curCate 구분하기 위해 id 붙여서 session에 저장
-        selectCate = sessionStorage.getItem("curCate"+"_"+this.state.id) == null ? cateData['cat0'] : JSON.parse(sessionStorage.getItem("curCate"+"_"+this.state.id));
+        selectCate = sessionStorage.getItem("curCate"+"_"+this.state.id) === null ? cateData['cat0'] : JSON.parse(sessionStorage.getItem("curCate"+"_"+this.state.id));
 
-        PostService.getAllPost(this.state.id).then((res) => {
+        PostService.getAllPost(this.state.id, selectCate).then((res) => {
             this.setState({ 
                 posts: res.data,
                 orgPosts: res.data,
@@ -57,7 +57,7 @@ class MyBlog extends Component {
     /* input 창에 onChange 이벤트 */
     setSearchHandler = (e) => {
         this.setState({
-            searchInput:e.target.value
+            searchInput: e.target.value
         })
     }
 
@@ -66,12 +66,12 @@ class MyBlog extends Component {
         if (e.key === "Enter") {
             {this.state.searchInput.startsWith("#") ? 
             // Tag 검색
-            PostService.getSearchPostByTag(this.state.searchInput.substring(1)).then((res) => {
+            PostService.getSearchPostByTag(this.state.id, this.state.curCate, this.state.searchInput.substring(1)).then((res) => {
                 this.setState({
                     posts: res.data
                 })
             })
-            : PostService.getSearchPost(this.state.searchInput).then((res) => {
+            : PostService.getSearchPost(this.state.id, this.state.curCate, this.state.searchInput).then((res) => {
                 this.setState({
                     posts: res.data
                 })
@@ -83,12 +83,12 @@ class MyBlog extends Component {
      setSearchContent = (e) => { 
         {this.state.searchInput.startsWith("#") ? 
             // Tag 검색
-            PostService.getSearchPostByTag(this.state.searchInput.substring(1)).then((res) => {
+            PostService.getSearchPostByTag(this.state.id, this.state.curCate, this.state.searchInput.substring(1)).then((res) => {
                 this.setState({
                     posts: res.data
                 })
             })
-            : PostService.getSearchPost(this.state.searchInput).then((res) => {
+            : PostService.getSearchPost(this.state.id, this.state.curCate, this.state.searchInput).then((res) => {
                 this.setState({
                     posts: res.data
                 })
@@ -98,8 +98,8 @@ class MyBlog extends Component {
 
     searchInputRemoveHandler = (e) => {
         this.setState({
-            searchInput:'',
-            posts:this.state.orgPosts
+            searchInput: '',
+            posts: this.state.orgPosts
         })
     }
 
@@ -121,11 +121,17 @@ class MyBlog extends Component {
     }
 
      /* 카테고리 onClick 이벤트. 카테고리 변경 및 sessionStorage에 state 저장 */
-     changeCate = (e) => {
+    changeCate = (e) => {
         this.setState({
             curCate: e.target.textContent,
             searchInput: ''
-        
+        });
+        PostService.getAllPost(this.state.id, e.target.textContent).then((res) => {
+            this.setState({ 
+                posts: res.data,
+                orgPosts: res.data,
+                //curCate: e.target.textContent
+            });
         });
         sessionStorage.setItem("curCate"+"_"+this.state.id, JSON.stringify(e.target.textContent));
     };

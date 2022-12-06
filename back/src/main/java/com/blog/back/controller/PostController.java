@@ -36,9 +36,10 @@ public class PostController {
     private TagService tagService;
 
     /* 모든 게시글 불러오기 */
-    @GetMapping("/{id}")
-    public List<Post> getAllPost(@PathVariable String id) {
-        return postService.getAllPost(id);
+    @PostMapping("/{id}")
+    public List<Post> getAllPost(@PathVariable String id, String category) {
+        if(category.equals("전체")) return postService.getAllPost(id);
+        else return postService.getPostByCate(id, category);
     }
 
     /* 게시글 생성 및 태그 저장 */
@@ -62,15 +63,21 @@ public class PostController {
     }
 
     /* 게시글 검색 */
-    @GetMapping("/search")
-    public List<Post> getSearchPost(@RequestParam(value = "search", required = false) String search) {
-        return postService.getPostByKeyword(search);
+    @PostMapping("/search")
+    public List<Post> getSearchPost(@RequestParam(value = "memberId", required = false) String memberId,
+                                    @RequestParam(value = "category", required = false) String category,
+                                    @RequestParam(value = "search", required = false) String search) {
+        if(category.equals("전체")) return postService.getPostByKeyword(memberId, search);
+        else return postService.getPostByKeywordCate(memberId, category, search);
     }
     
     /* 태그 검색 */
     @GetMapping("/searchtag")
-    public List<Optional<Post>> getSearchPostByTag(@RequestParam(value = "tag", required = false) String tag) {
-        return postService.getPostByTag(tag);
+    public List<Optional<Post>> getSearchPostByTag(@RequestParam(value = "memberId", required = false) String memberId,
+                                                   @RequestParam(value = "category", required = false) String category,
+                                                   @RequestParam(value = "tag", required = false) String tag) {
+        if(category.equals("전체")) return postService.getPostByTag(memberId, tag);
+        else return postService.getPostByTagCate(memberId, category, tag);
     }
 
     /* 게시글 수정 */

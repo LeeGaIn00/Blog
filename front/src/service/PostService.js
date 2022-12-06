@@ -3,8 +3,8 @@ import axios from 'axios';
 const POST_API_BASE_URL = "http://localhost:8080/post";
 
 class PostService {
-    getAllPost(id) {
-        return axios.get(POST_API_BASE_URL + "/" + id);
+    getAllPost(id, category) {
+        return axios.post(POST_API_BASE_URL + "/" + id + "?category=" + category);
     }
     createPost(data) {
         return axios.post(POST_API_BASE_URL, data);
@@ -12,11 +12,11 @@ class PostService {
     getPost(no) {
         return axios.get(POST_API_BASE_URL + "/detail/" + no, { withCredentials: true });
     }
-    getSearchPost(search){
-        return axios.get(POST_API_BASE_URL+"/search/?search=" + search);
+    getSearchPost(id, category, search){
+        return axios.post(POST_API_BASE_URL+"/search?memberId=" + id + "&category=" + category + "&search=" + search);
     }
-    getSearchPostByTag(tag){
-        return axios.get(POST_API_BASE_URL+"/searchtag/?tag=" + tag);
+    getSearchPostByTag(id, category, tag){
+        return axios.get(POST_API_BASE_URL+"/searchtag?memberId=" + id + "&category=" + category + "&tag=" + tag);
     }
     updatePost(no, data){
         return axios.put(POST_API_BASE_URL + "/" + no, data);
