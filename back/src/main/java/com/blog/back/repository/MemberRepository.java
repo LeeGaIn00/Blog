@@ -13,4 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
     @Query("SELECT m FROM Member m WHERE m.id LIKE %:search%")
     List<Member> findMemberByKeyword(@Param("search") String search);
+
+    boolean existsById(String id);
+    boolean existsByEmail(String email);
 }

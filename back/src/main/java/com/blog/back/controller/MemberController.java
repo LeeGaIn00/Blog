@@ -4,6 +4,9 @@ import com.blog.back.model.Member;
 import com.blog.back.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,22 +14,42 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("")
+@RequestMapping("/member")
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private PasswordEncoder pwEncoder;
 
     @GetMapping("/index")
     public List<Member> getAllMember() { return memberService.getAllMember(); }
 
     // get profile by id
-    @GetMapping("/member/profile/{id}")
+    @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable String id) {
         return memberService.getProfile(id);
     }
 
     /* 검색 */
-    @GetMapping("/member")
+    @GetMapping("")
     public List<Member> getMemberByKeyword(@RequestParam(value = "search", required = false) String search) { return memberService.getMemberByKeyword(search); }
+
+    @GetMapping("/check/id/{id}")
+    public ResponseEntity<?> checkNickname(@PathVariable("id") String id) {
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.checkId(id));
+    }
+
+    @GetMapping("/check/email/{email}")
+    public ResponseEntity<?> checkEmail(@PathVariable("email") String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.checkEmail(email));
+    }
+
+    @PostMapping("/signup")
+    public Member signUp(@RequestBody Member member) {
+        String rawPw = member.getPassword();
+        String encodePw = pwEncoder.encode(rawPw);
+        member.setPassword(encodePw);
+        return memberService.signUp(member);
+    }
 }

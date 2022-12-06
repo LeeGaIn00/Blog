@@ -21,4 +21,16 @@ public class MemberService {
     }
 
     public List<Member> getMemberByKeyword(String search) { return memberRepository.findMemberByKeyword(search); }
+
+    public boolean checkId(String id) {
+        return memberRepository.existsById(id);
+    };
+
+    public boolean checkEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    };
+
+    public Member signUp(Member member) {
+        return memberRepository.save(member);
+    }
 }

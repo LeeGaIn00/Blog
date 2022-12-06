@@ -23,6 +23,21 @@
 
             .register-group {
                 margin-bottom: 20px;
+                .col {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+                input {
+                    display: flex;
+                    &::placeholder {
+                        color: #b0b4b7;
+                    }
+                }
+                .dbl-ck-btn {
+                    display: flex;
+                    margin-left: 0;
+                    margin-right: 0;
+                }
             }
         }
 
