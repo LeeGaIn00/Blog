@@ -30,6 +30,11 @@ public class PostService {
         return postRepository.findByMemberId(id);
     }
 
+    /* 카테고리 별 게시글 불러오기 */
+    public List<Post> getPostByCate(String id, String category) {
+        return postRepository.findPostByCate(id, category);
+    }
+
     /* 게시글 생성 및 태그 저장 */
     public void createPost(PostDto postDto) {
         postRepository.save(postDto.getPost());
@@ -42,16 +47,35 @@ public class PostService {
     }
 
     /* 게시글 검색 */
-    public List<Post> getPostByKeyword(String search) {
-        return postRepository.findPostByKeyword(search);
+    public List<Post> getPostByKeyword(String memberId, String search) {
+        return postRepository.findPostByKeyword(memberId, search);
+    }
+
+    /* 카테고리 별 게시글 검색 */
+    public List<Post> getPostByKeywordCate(String memberId, String category, String search) {
+        return postRepository.findPostByKeywordCate(memberId, category, search);
     }
 
     /* 태그 검색 */
-    public List<Optional<Post>> getPostByTag(String tag) {
+    public List<Optional<Post>> getPostByTag(String memberId, String tag) {
         List<Optional<Post>> list = new ArrayList<>();
 
         Integer tagId = tagRepository.findByTitle(tag).getId();
-        List<Integer> postNoList = posttagRepository.getPostNoByTagId(tagId);
+
+        List<Integer> postNoList = posttagRepository.getPostNoByTagId(memberId, tagId);
+
+        for(Integer no:postNoList)
+            list.add(postRepository.findById(no));
+        return list;
+    }
+
+    /* 카테고리 별 태그 검색 */
+    public List<Optional<Post>> getPostByTagCate(String memberId, String category, String tag) {
+        List<Optional<Post>> list = new ArrayList<>();
+
+        Integer tagId = tagRepository.findByTitle(tag).getId();
+
+        List<Integer> postNoList = posttagRepository.getPostNoByTagIdCate(memberId, category, tagId);
 
         for(Integer no:postNoList)
             list.add(postRepository.findById(no));
