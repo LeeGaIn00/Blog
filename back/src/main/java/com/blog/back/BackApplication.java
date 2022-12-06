@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
 public class BackApplication {
 
 	public static void main(String[] args) {
