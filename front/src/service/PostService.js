@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+const BASE_URL = "http://localhost:8080";
 const POST_API_BASE_URL = "http://localhost:8080/post";
 
 class PostService {
@@ -8,6 +9,9 @@ class PostService {
     }
     createPost(data) {
         return axios.post(POST_API_BASE_URL, data);
+    }
+    imgUpload(form) {
+        return axios.post(BASE_URL + "/upload", form, { headers: { 'Content-Type': 'multipart/form-data' } });
     }
     getPost(no) {
         return axios.get(POST_API_BASE_URL + "/detail/" + no, { withCredentials: true });

@@ -43,7 +43,7 @@ class EditorComponent extends Component {
                     modules={this.modules} 
                     formats={this.formats} 
                     value={value || ''} 
-                    onChange={(content, delta, source, editor) => onChange(editor.getHTML())}
+                    onChange={(content, delta, source, editor) => onChange(editor.getHTML(), editor.getText())}
                     placeholder="내용을 입력하세요"
                 />
             </div>
