@@ -32,7 +32,8 @@ class WritePostPage extends Component {
             views: 0,
             tags: [],
             isLoading: true,
-            curCate: cateData['cat1']
+            curCate: cateData['cat1'],
+            pText: ''
         }
         this.changeTextHandler = this.changeTextHandler.bind(this);
         this.changeTitleHandler = this.changeTitleHandler.bind(this);
@@ -58,11 +59,14 @@ class WritePostPage extends Component {
                 });
             });
         }
+        //window.scrollTo(0, 0);
     }
 
-    changeTextHandler = (event) => {
-        this.setState({text: event});
-        //console.log(document.getElementsByTagName('p')[0].getElementsByTagName('img')[0].src);
+    changeTextHandler(e1, e2) {
+        this.setState({ 
+            text: e1,
+            pText: e2 // 태그, 이미지 제외한 순수한 문자열만 불러옴
+        });
     }
 
     changeTitleHandler = (event) => {
@@ -74,8 +78,36 @@ class WritePostPage extends Component {
         this.setState({tags: prop});
     }
 
-    createPost = (event) => {
+    dataURLtoFile = (dataurl) => {
+        const arr = dataurl.split(',')
+        const mime = arr[0].match(/:(.*?);/)[1]
+        const filename = this.state.memberId + new Date().getTime() + '.' + mime.substring(6)
+        const bstr = atob(arr[1])
+        let n = bstr.length
+        const u8arr = new Uint8Array(n)
+        while (n) {
+          u8arr[n - 1] = bstr.charCodeAt(n - 1)
+          n -= 1 
+        }
+        return new File([u8arr], filename, { type: mime })
+      }
+
+    createPost(event) {
         event.preventDefault();
+
+        const imgCheck = document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img')[0];
+        let form;
+        // 이미지 처리
+        if(imgCheck) {
+            form = new FormData();
+            let imgUrl = document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img');
+            
+            for (let i = 0; i < imgUrl.length; i++) { 
+                const filename = this.state.memberId + new Date().getTime();
+                const file =  this.dataURLtoFile(imgUrl[i].src, filename);
+                form.append("file", file); 
+            }
+        }
 
         let post = {
             memberId: this.state.memberId,
@@ -89,28 +121,47 @@ class WritePostPage extends Component {
             post: post,
             tags: this.state.tags
         }
-        
-        // let form = new FormData();
-        // let imgUrl = document.getElementsByTagName('p')[0].getElementsByTagName('img')[0].src;
-        
-        // form.append("img", imgUrl);
-        // form.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
 
         //console.log("post => "+ JSON.stringify(post));
         //console.log("data => " + JSON.stringify(data));
 
-        // // 글 생성
+        // 글 생성
         if (this.state.no === '_create') {
-            /* 새 글 생성 */
-            PostService.createPost(data).then(res => {
-                this.props.history.push(`/myblog/${this.state.memberId}`);
-            });
+            /* 이미지 업로드 */
+            {  imgCheck ? 
+                PostService.imgUpload(form).then(res => {
+                    for(let i = 0; i < res.data.length; i++) 
+                        document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img')[i].src = `${process.env.PUBLIC_URL}/img/${res.data[i].fileName}`;
+                    
+                    // document.getElementsByTagName('p')[0].getElementsByTagName('img')[0].src = `${process.env.PUBLIC_URL}/img/${res.data.fileName}`;
+                    this.setState({
+                        text: document.getElementsByClassName('ql-editor')[0].innerHTML
+                    });
+                    data.post.text = document.getElementsByClassName('ql-editor')[0].innerHTML;
+                }).then(res => {
+                    PostService.createPost(data).then(res => {
+                        this.props.history.push(`/myblog/${this.state.memberId}`);
+                    })
+                }) : 
+                /* 이미지 업로드 x */
+                PostService.createPost(data).then(res => {
+                     this.props.history.push(`/myblog/${this.state.memberId}`);
+                });
+            }
         } else {    
             /* 기존 글 수정 */
             PostService.updatePost(this.state.no, data).then(res => {
                 this.props.history.push(`/myblog/${this.state.memberId}`);
             });
         }
+    }
+
+    checkValid = (event) => {
+        // const btn = document.querySelector('.btn-success');
+        // { this.state.pText.length > 1 && this.state.title.length > 0 ? 
+        //     btn.disabled = false : btn.disabled = true; }
+        { !(this.state.title.length > 1 && this.state.p.length > 0) ?
+            alert("제목 또는 내용을 작성하세요.") : this.createPost(event); }
     }
 
      /* 취소버튼 클릭 시 목록으로 이동 */
@@ -179,7 +230,7 @@ class WritePostPage extends Component {
                             />
                         {/* </div> */}
                         <div className="wr-btn">
-                            <Button color="success" onClick={this.createPost}>작성</Button>
+                            <Button color="success" onClick={this.checkValid}> 작성</Button>
                             <Button color="danger" onClick={() => this.props.history.goBack()}>취소</Button>
                         </div>
                     </div>
