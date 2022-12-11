@@ -1,7 +1,9 @@
 package com.blog.back.service;
 
+import com.blog.back.dto.MemberResponseDto;
 import com.blog.back.model.Member;
 import com.blog.back.repository.MemberRepository;
+import com.blog.back.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,9 @@ public class MemberService {
         return memberRepository.existsByEmail(email);
     };
 
-    public Member signUp(Member member) {
-        return memberRepository.save(member);
+    public MemberResponseDto getMyInfoBySecurity() {
+        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .map(MemberResponseDto::of)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
     }
 }

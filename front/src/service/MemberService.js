@@ -20,10 +20,6 @@ class MemberService {
     checkEmail(email) {
         return axios.get(MEMBER_API_BASE_URL + "/check/email/" + email);
     }
-    /* 회원가입 */
-    signUp(member) {
-        return axios.post(MEMBER_API_BASE_URL + "/signup", member);
-    }
 }
 
 export default new MemberService();
