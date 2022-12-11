@@ -1,5 +1,6 @@
 package com.blog.back.controller;
 
+import com.blog.back.dto.FileDto;
 import com.blog.back.dto.PostDto;
 import com.blog.back.exception.ResourceNotFoundException;
 import com.blog.back.model.Post;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -89,10 +91,21 @@ public class PostController {
 
     /* 게시글 삭제 */
     @DeleteMapping("/{no}")
-    public ResponseEntity<Map<String, Boolean>> deletePostByNo(
-            @PathVariable Integer no){
+    public ResponseEntity<Map<String, Boolean>> deletePostByNo(@PathVariable Integer no,
+                                                               @RequestBody FileDto fileDto){
         tagService.deleteTag(no);
         commentService.deleteCommentByPostNo(no);
+
+        // delete file
+        for(String f: fileDto.getFilePath()) {
+            File file = new File("/Users/gain/Blog/front/public" + f);
+            if(file.exists()) {
+                file.delete();
+                System.out.println(f + " 삭제 완료");
+            } else {
+                System.out.println("존재하지 않는 파일 : " + file.getName());
+            }
+        }
         return postService.deletePost(no);
     }
 

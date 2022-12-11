@@ -25,8 +25,8 @@ class PostService {
     updatePost(no, data){
         return axios.put(POST_API_BASE_URL + "/" + no, data);
     }
-    deletePost(no){
-        return axios.delete(POST_API_BASE_URL + "/" + no);
+    deletePost(no, data){
+        return axios.delete(POST_API_BASE_URL + "/" + no, data);
     }
 
     /* comment */
