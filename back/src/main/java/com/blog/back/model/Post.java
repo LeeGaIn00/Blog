@@ -31,6 +31,9 @@ public class Post {
     @Column(name = "views")
     private Integer views;
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
     @Column(name = "created_time")
     private Date createdTime;
 

@@ -31,6 +31,7 @@ class WritePostPage extends Component {
             title: '',
             views: 0,
             tags: [],
+            thumbnail: '',
             isLoading: true,
             curCate: cateData['cat1'],
             pText: ''
@@ -114,7 +115,8 @@ class WritePostPage extends Component {
             category: this.state.curCate,
             text: this.state.text,
             title: this.state.title,
-            views: this.state.views
+            views: this.state.views,
+            thumbnail: form.get("file").name
         };
 
         let data = {

@@ -64,7 +64,7 @@ class Post extends Component {
 
             let data = { filePath: imgSrc }
             
-            PostService.deletePost(this.state.no, data).then(res => {
+            PostService.deletePost(this.state.no, {data}).then(res => {
                 if (res.status === 200) {
                     this.props.history.push(`/myblog/${this.state.id}`);
                 } else {
