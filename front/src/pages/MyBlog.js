@@ -136,6 +136,14 @@ class MyBlog extends Component {
         sessionStorage.setItem("curCate"+"_"+this.state.id, JSON.stringify(e.target.textContent));
     };
 
+    // 글 목록 미리보기에서 이미지를 제외한 텍스트만 보여지도록 가공
+    textHandler = (text) => {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(text, 'text/html');
+        console.log(doc.getElementsByTagName('p')[0].textContent);
+        return doc.getElementsByTagName('p')[0].textContent;
+    }
+
     render() {
         return (
             <>
@@ -186,13 +194,13 @@ class MyBlog extends Component {
                     <div className="search-bar">
                         <input type="search" placeholder="검색" value={this.state.searchInput}
                             onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>
-                            <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
-                                <FontAwesomeIcon icon={faMagnifyingGlass} /> 
-                            </span>
+                        <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
+                            <FontAwesomeIcon icon={faMagnifyingGlass} /> 
+                        </span>
                         {this.state.searchInput.length !== 0 &&
                             <button className="btn-clear" onClick={this.searchInputRemoveHandler}>
                                 <FontAwesomeIcon className="removeIcon" icon={faCircleXmark} />
-                            </button>
+                            </button> 
                         }    
                     </div>
                     <div className="mb-tb-wrap">
@@ -223,7 +231,7 @@ class MyBlog extends Component {
                                             </td>
                                         </tr>
                                         <tr onClick={() => this.readPost(post.no)}>
-                                            <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: post.text }} >
+                                            <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: this.textHandler(post.text) }} >
                                             </td>
                                         </tr>
                                     </>

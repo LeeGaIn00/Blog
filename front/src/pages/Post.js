@@ -32,7 +32,6 @@ class Post extends Component {
     }
     componentDidMount() {
         PostService.getPost(this.state.no).then(res => {
-            console.log(res.data);
             this.setState({ 
                 post: res.data.post,
                 tags: res.data.tags
@@ -57,9 +56,15 @@ class Post extends Component {
 
      /* 글 삭제 */
      deleteView = async function () {
-        if (window.confirm("글을 삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다")) {
-            PostService.deletePost(this.state.no).then(res => {
-                //console.log("delete result => " + JSON.stringify(res));
+         if (window.confirm("글을 삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다")) {
+            let tagList = document.querySelector('.post-contents').getElementsByTagName('img');
+            let imgSrc = [];
+            for(let i = 0; i < tagList.length; i++) 
+                imgSrc.push(tagList[i].getAttribute('src'))
+
+            let data = { filePath: imgSrc }
+            
+            PostService.deletePost(this.state.no, data).then(res => {
                 if (res.status === 200) {
                     this.props.history.push(`/myblog/${this.state.id}`);
                 } else {
