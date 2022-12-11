@@ -65,7 +65,7 @@ class WritePostPage extends Component {
     changeTextHandler(e1, e2) {
         this.setState({ 
             text: e1,
-            pText: e2 // 태그, 이미지 제외한 순수한 문자열만 불러옴
+            pText: e2 // 태그, 이미지 제외한 문자열만 불러옴
         });
     }
 
@@ -133,7 +133,6 @@ class WritePostPage extends Component {
                     for(let i = 0; i < res.data.length; i++) 
                         document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img')[i].src = `${process.env.PUBLIC_URL}/img/${res.data[i].fileName}`;
                     
-                    // document.getElementsByTagName('p')[0].getElementsByTagName('img')[0].src = `${process.env.PUBLIC_URL}/img/${res.data.fileName}`;
                     this.setState({
                         text: document.getElementsByClassName('ql-editor')[0].innerHTML
                     });
@@ -160,7 +159,7 @@ class WritePostPage extends Component {
         // const btn = document.querySelector('.btn-success');
         // { this.state.pText.length > 1 && this.state.title.length > 0 ? 
         //     btn.disabled = false : btn.disabled = true; }
-        { !(this.state.title.length > 1 && this.state.p.length > 0) ?
+        { !(this.state.title.length > 1 && this.state.pText.length > 0) ?
             alert("제목 또는 내용을 작성하세요.") : this.createPost(event); }
     }
 
