@@ -221,7 +221,9 @@ class MyBlog extends Component {
                                     <>
                                         <tr onClick={() => this.readPost(post.no)}>
                                             <th scope="row" rowSpan={2}>
-                                                사진
+                                                {post.thumbnail === null ? 
+                                                <img src={require('../assets/img/noImage.png')}/>
+                                                : <img src={`${process.env.PUBLIC_URL}/img/${post.thumbnail}`}/> }
                                             </th>
                                             <td className="mb-tb-title">
                                                 {post.title}
