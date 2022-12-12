@@ -98,6 +98,7 @@ public class PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("Not exist Post Data by no : [" + no + "]"));
         post.setTitle(postDto.getPost().getTitle());
         post.setText(postDto.getPost().getText());
+        post.setThumbnail(postDto.getPost().getThumbnail());
         post.setUpdatedTime(new Date());
 
         Post endUpdatePosst = postRepository.save(post);

@@ -31,10 +31,9 @@ class WritePostPage extends Component {
             title: '',
             views: 0,
             tags: [],
-            thumbnail: '',
+            thumbnail: null,
             isLoading: true,
-            curCate: cateData['cat1'],
-            pText: ''
+            curCate: cateData['cat1']
         }
         this.changeTextHandler = this.changeTextHandler.bind(this);
         this.changeTitleHandler = this.changeTitleHandler.bind(this);
@@ -49,12 +48,12 @@ class WritePostPage extends Component {
             /* 수정 시 기존 글 내용 불러옴 */
             await PostService.getPost(this.state.no).then(res => {
                 let post = res.data.post;
-
                 this.setState({
                     title: post.title,
                     text: post.text,
                     memberId: post.memberId,
                     views: post.views,
+                    thumbnail: post.thumbnail,
                     tags: res.data.tags,
                     isLoading: false
                 });
@@ -63,11 +62,8 @@ class WritePostPage extends Component {
         //window.scrollTo(0, 0);
     }
 
-    changeTextHandler(e1, e2) {
-        this.setState({ 
-            text: e1,
-            pText: e2 // 태그, 이미지 제외한 문자열만 불러옴
-        });
+    changeTextHandler(event) {
+        this.setState({ text: event });
     }
 
     changeTitleHandler = (event) => {
@@ -91,24 +87,13 @@ class WritePostPage extends Component {
           n -= 1 
         }
         return new File([u8arr], filename, { type: mime })
-      }
+    }
 
     createPost(event) {
         event.preventDefault();
 
-        const imgCheck = document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img')[0];
+        let imgUrl = document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img');
         let form;
-        // 이미지 처리
-        if(imgCheck) {
-            form = new FormData();
-            let imgUrl = document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img');
-            
-            for (let i = 0; i < imgUrl.length; i++) { 
-                const filename = this.state.memberId + new Date().getTime();
-                const file =  this.dataURLtoFile(imgUrl[i].src, filename);
-                form.append("file", file); 
-            }
-        }
 
         let post = {
             memberId: this.state.memberId,
@@ -116,7 +101,7 @@ class WritePostPage extends Component {
             text: this.state.text,
             title: this.state.title,
             views: this.state.views,
-            thumbnail: form.get("file").name
+            thumbnail: this.state.thumbnail
         };
 
         let data = {
@@ -124,44 +109,101 @@ class WritePostPage extends Component {
             tags: this.state.tags
         }
 
-        //console.log("post => "+ JSON.stringify(post));
-        //console.log("data => " + JSON.stringify(data));
-
         // 글 생성
         if (this.state.no === '_create') {
             /* 이미지 업로드 */
-            {  imgCheck ? 
+            if(imgUrl.length > 0) {
+                form = new FormData();
+                // base64 -> 파일 형태로 바꿔서 form에 저장
+                for (let i = 0; i < imgUrl.length; i++) { 
+                    const filename = this.state.memberId + new Date().getTime();
+                    const file =  this.dataURLtoFile(imgUrl[i].src, filename);
+                    form.append("file", file); 
+                }
+                // 썸네일 이미지 가장 첫번째 사진으로 설정
+                post.thumbnail = '/img/' + form.get('file').name;
+
                 PostService.imgUpload(form).then(res => {
+                    // img의 src속성 이미지 저장한 경로로 변경
                     for(let i = 0; i < res.data.length; i++) 
                         document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img')[i].src = `${process.env.PUBLIC_URL}/img/${res.data[i].fileName}`;
                     
                     this.setState({
                         text: document.getElementsByClassName('ql-editor')[0].innerHTML
                     });
+                    // db에 저장할 텍스트 변경
                     data.post.text = document.getElementsByClassName('ql-editor')[0].innerHTML;
                 }).then(res => {
                     PostService.createPost(data).then(res => {
                         this.props.history.push(`/myblog/${this.state.memberId}`);
                     })
-                }) : 
-                /* 이미지 업로드 x */
-                PostService.createPost(data).then(res => {
-                     this.props.history.push(`/myblog/${this.state.memberId}`);
+                }) 
+            }
+            else {
+                 /* 이미지 업로드 x */
+                 PostService.createPost(data).then(res => {
+                    this.props.history.push(`/myblog/${this.state.memberId}`);
+               });
+            }
+        
+        } else {   // 글 수정 
+            // 새로 추가된 이미지가 있는지 여부 체크
+            let imgCheck = false;
+            for(let i = 0; i < imgUrl.length; i++) {
+                if(imgUrl[i].getAttribute('src').startsWith('data')) {
+                    imgCheck = true; // 하나라도 추가된 이미지가 있으면 체크
+                    break;
+                }
+            }
+            /* 이미지 업로드 */ 
+            // 본문에 이미지가 존재하면서 새로 추가된 이미지가 있는 경우
+            if(imgUrl.length > 0 && imgCheck) {
+                form = new FormData();
+                // 이미지의 형식이 base64인 경우 변경해준 뒤 form에 추가
+                for (let i = 0; i < imgUrl.length; i++) { 
+                    if(imgUrl[i].getAttribute('src').startsWith('data')) {
+                        const filename = this.state.memberId + new Date().getTime();
+                        const file =  this.dataURLtoFile(imgUrl[i].src, filename);
+                        form.append("file", file); 
+                        imgUrl[i].setAttribute('src', '/img/'+file.name);
+                    }
+                }
+                // 썸네일 변경
+                post.thumbnail = imgUrl[0].getAttribute('src');
+
+                PostService.imgUpload(form).then(res => {
+                    const imgSrc = document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img');
+                    for(let i = 0; i < res.data.length; i++) {
+                        // 새로 업로드 된 이미지의 경로만 수정
+                        if(imgSrc[i].getAttribute('src').startsWith('data'))
+                            document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img')[i].src = `${process.env.PUBLIC_URL}/img/${res.data[i].fileName}`;
+                    }
+                    this.setState({
+                        text: document.getElementsByClassName('ql-editor')[0].innerHTML
+                    });
+                    // db에 저장할 텍스트 변경
+                    data.post.text = document.getElementsByClassName('ql-editor')[0].innerHTML;
+                }).then(res => {
+                    PostService.updatePost(this.state.no, data).then(res => {
+                        this.props.history.push(`/myblog/${this.state.memberId}`);
+                    })
+                })  
+            }
+            else {
+                data.post.thumbnail = 
+                /* 이미지 업로드 X */
+                PostService.updatePost(this.state.no, data).then(res => {
+                    this.props.history.push(`/myblog/${this.state.memberId}`);
                 });
             }
-        } else {    
-            /* 기존 글 수정 */
-            PostService.updatePost(this.state.no, data).then(res => {
-                this.props.history.push(`/myblog/${this.state.memberId}`);
-            });
         }
     }
 
     checkValid = (event) => {
-        // const btn = document.querySelector('.btn-success');
-        // { this.state.pText.length > 1 && this.state.title.length > 0 ? 
-        //     btn.disabled = false : btn.disabled = true; }
-        { !(this.state.title.length > 1 && this.state.pText.length > 0) ?
+        const text = document.getElementsByClassName('ql-editor')[0].textContent.length;
+        const img = document.getElementsByClassName('ql-editor')[0].getElementsByTagName('img').length
+        // 본문에 텍스트 또는 이미지가 존재하는 경우 채워진 것으로 간주
+        { !(this.state.title.length > 1 && (text > 0 || img > 0)) ?
             alert("제목 또는 내용을 작성하세요.") : this.createPost(event); }
     }
 
