@@ -140,7 +140,6 @@ class MyBlog extends Component {
     textHandler = (text) => {
         var parser = new DOMParser();
         var doc = parser.parseFromString(text, 'text/html');
-        console.log(doc.getElementsByTagName('p')[0].textContent);
         return doc.getElementsByTagName('p')[0].textContent;
     }
 
@@ -223,7 +222,7 @@ class MyBlog extends Component {
                                             <th scope="row" rowSpan={2}>
                                                 {post.thumbnail === null ? 
                                                 <img src={require('../assets/img/noImage.png')}/>
-                                                : <img src={`${process.env.PUBLIC_URL}/img/${post.thumbnail}`}/> }
+                                                : <img src={`${process.env.PUBLIC_URL}${post.thumbnail}`}/> }
                                             </th>
                                             <td className="mb-tb-title">
                                                 {post.title}
