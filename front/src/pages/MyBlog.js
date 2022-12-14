@@ -218,11 +218,10 @@ class MyBlog extends Component {
                                 { this.state.posts.map (
                                     post =>
                                     <>
+                                    {post.thumbnail != null ?
                                         <tr onClick={() => this.readPost(post.no)}>
                                             <th scope="row" rowSpan={2}>
-                                                {post.thumbnail === null ? 
-                                                <img src={require('../assets/img/noImage.png')}/>
-                                                : <img src={`${process.env.PUBLIC_URL}${post.thumbnail}`}/> }
+                                                <img src={`${process.env.PUBLIC_URL}${post.thumbnail}`}/> 
                                             </th>
                                             <td className="mb-tb-title">
                                                 {post.title}
@@ -230,11 +229,25 @@ class MyBlog extends Component {
                                             <td className="mb-tb-date" rowSpan={2}>
                                                 {post.createdTime.substring(0, 10)}
                                             </td>
-                                        </tr>
-                                        <tr onClick={() => this.readPost(post.no)}>
-                                            <td className="mb-tb-txt" dangerouslySetInnerHTML = {{ __html: this.textHandler(post.text) }} >
+                                        </tr> :
+                                         <tr onClick={() => this.readPost(post.no)}>
+                                            <td className="mb-tb-title">
+                                                {post.title}
                                             </td>
-                                        </tr>
+                                            <td></td>
+                                            <td className="mb-tb-date" rowSpan={2}>
+                                                {post.createdTime.substring(0, 10)}
+                                            </td>
+                                        </tr>  }
+                                    {post.thumbnail != null ? 
+                                        <tr onClick={() => this.readPost(post.no)}>
+                                            <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: this.textHandler(post.text) }}>
+                                            </td>
+                                        </tr> :
+                                        <tr onClick={() => this.readPost(post.no)}>
+                                            <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: this.textHandler(post.text) }} colSpan={2}>
+                                            </td>
+                                        </tr> }
                                     </>
                                     )
                                 }
