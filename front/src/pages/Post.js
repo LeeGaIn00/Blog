@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'reactstrap';
@@ -12,50 +12,39 @@ import '../assets/scss/post.scss';
 // service
 import PostService from '../service/PostService.js';
 
-class Post extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state ={
-            id: this.props.location.state.id,
-            no: this.props.match.params.no,
-            post: {},
-            tags: [],
-            comments: [],
-            text: '',
-            updating: {
-                now: false,
-                commentNo: ''
-            }
-        }
-        this.changeTextHandler = this.changeTextHandler.bind(this);
-    }
-    componentDidMount() {
-        PostService.getPost(this.state.no).then(res => {
-            this.setState({ 
-                post: res.data.post,
-                tags: res.data.tags
-            });
+const Post = (props) => {
+    const id = props.location.state.id;
+    const no = props.match.params.no;
+    const [post, setPost] = useState({});
+    const [tags, setTags] = useState([]);
+    const [comments, setComments] = useState([]);
+    const [text, setText] = useState('');
+    const [updating, setUpdating] = useState({now:false, commentNo:''});
+    
+    useEffect(() => {
+        PostService.getPost(no).then(res => {
+            setPost(res.data.post);
+            setTags(res.data.tags);
         })
-        PostService.getAllComment(this.state.no).then(res => {
-            this.setState({ comments: res.data });
+        PostService.getAllComment(no).then(res => {
+            setComments(res.data);
             console.log(res.data);
         })
         window.scrollTo(0, 0);
         document.querySelector('.post-comment-btn').disabled = true;
-    }
-
+    }, []);
+    
     /* 글 수정으로 이동 */
-    goToUpdate = (event) => {
+    const goToUpdate = (event) => {
         event.preventDefault();
-        this.props.history.push({
-            pathname: `/create-post/${this.state.no}`,
-            state: {id: this.state.id}
+        props.history.push({
+            pathname: `/create-post/${no}`,
+            state: {id: id}
         });
     }
 
      /* 글 삭제 */
-     deleteView = async function () {
+    const deleteView = async function () {
          if (window.confirm("글을 삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다")) {
             let tagList = document.querySelector('.post-contents').getElementsByTagName('img');
             let imgSrc = [];
@@ -64,9 +53,9 @@ class Post extends Component {
 
             let data = { filePath: imgSrc }
             
-            PostService.deletePost(this.state.no, {data}).then(res => {
+            PostService.deletePost(no, {data}).then(res => {
                 if (res.status === 200) {
-                    this.props.history.push(`/myblog/${this.state.id}`);
+                    props.history.push(`/myblog/${id}`);
                 } else {
                     alert("글 삭제가 실패했습니다.");
                 }
@@ -75,12 +64,12 @@ class Post extends Component {
     }
 
     /* 댓글 create */
-    createComment = () => {
+    const createComment = () => {
         let comment = {
-            postNo: this.state.no,
-            memberId: this.state.id,
-            text: this.state.text,
-            orgText: this.state.text
+            postNo: no,
+            memberId: id,
+            text: text,
+            orgText: text
         }
         console.log("comment => " + JSON.stringify(comment));
         PostService.createComment(comment).then(res => {
@@ -88,52 +77,46 @@ class Post extends Component {
         })
     }
 
-    checkValid = () => {
+    const checkValid = () => {
         const btn = document.querySelector('.post-comment-btn');
-        { this.state.text.length > 0 ? 
+        { text.length > 0 ? 
             btn.disabled = false : btn.disabled = true; }
     }
     
-    checkUpdateValid = () => {
+    const checkUpdateValid = () => {
         const btn = document.querySelector('.post-commentupdate-btn');
-        { this.state.text.length > 0 ? 
+        { text.length > 0 ? 
             btn.disabled = false : btn.disabled = true; }
     }
 
     /* 댓글 update */
-    updateComment = (commentNo) => {
+    const updateComment = (commentNo) => {
         let comment = {
-            postNo: this.state.no,
-            memberId: this.state.id,
-            //text: this.state.text
+            postNo: no,
+            memberId: id,
+            //text: text
             text: document.querySelector('#post-updatecomment').value
         }
         PostService.updateComment(commentNo, comment).then(res => {
             window.location.reload();
         })
-        console.log(this.state.text);
+        console.log(text);
     }
 
     /* onChange 이벤트 발생 시 댓글 내용 저장 */
-    changeTextHandler = (event) => {
-        this.setState({ text: event.target.value }); // 아무것도 입력 안하고 등록 누르면 원래 댓글 내용 사라짐
-        
+    const changeTextHandler = (event) => {
+        setText(event.target.value); // 아무것도 입력 안하고 등록 누르면 원래 댓글 내용 사라짐
     }
 
     /* 댓글 수정 상태로 업데이트 */
-    changeUpdating = (commentNo) => {
-        this.setState({
-            updating: {
-                now: !this.state.updating.now,
-                commentNo: commentNo
-            }
-        });
+    const changeUpdating = (commentNo) => {
+        setUpdating({now: !updating.now, commentNo: commentNo});
     }
 
     /* 댓글 delete */
-    deleteComment = async function (commentNo) { 
+    const deleteComment = async function (commentNo) { 
         if (window.confirm("댓글을 삭제하시겠습니까?\n삭제된 댓글은 복구할 수 없습니다")) {
-            PostService.deleteComment(this.state.no, commentNo).then(res => {
+            PostService.deleteComment(no, commentNo).then(res => {
                 console.log("delete result => " + JSON.stringify(res));
                 window.location.reload();
             }).catch(error => alert("댓글 삭제가 실패했습니다."));
@@ -141,33 +124,32 @@ class Post extends Component {
     }
 
      /* 목록으로 돌아가기 */
-     goToList() {
-        this.props.history.goBack();
+    const goToList = () => {
+        props.history.goBack();
     }
 
-    render() {
-        return (
-            <>
-            <MyBlogHeader id={this.state.id} />
+    return (
+        <>
+            <MyBlogHeader id={id} />
             <div className='post-main'>
                 <div className='post-wrapper'> 
                     <div className='post-header'>
                         <h3 className='post-title'>
-                            {this.state.post.title}
+                            {post.title}
                         </h3>
                         <span className='post-profile'></span>
-                        <span className='post-nickname'>{this.state.post.memberId}</span>&nbsp;&nbsp;
-                        <span className='post-date'>{this.state.post.createdTime}</span>
+                        <span className='post-nickname'>{post.memberId}</span>&nbsp;&nbsp;
+                        <span className='post-date'>{post.createdTime}</span>
                         <span className='post-views'>
                             <FontAwesomeIcon icon={faEye} className='post-views-icon'/> 
-                            {this.state.post.views}
+                            {post.views}
                         </span>
                         <hr />
                     </div>
-                    <div className='post-contents' dangerouslySetInnerHTML = {{ __html: this.state.post.text }} />
+                    <div className='post-contents' dangerouslySetInnerHTML = {{ __html: post.text }} />
                     <div className='post-tags'>
                         <ul>
-                            {this.state.tags.map((tag, index) => (
+                            {tags.map((tag, index) => (
                                 <li key={index}>
                                     <span className="tag-title">#{tag}</span>
                                 </li>
@@ -176,13 +158,13 @@ class Post extends Component {
                     </div>
                     <br />
                     <div className='post-btn'>
-                       {/* 작성자만 볼 수 있게 */}
+                        {/* 작성자만 볼 수 있게 */}
                         <Button size='sm' 
-                                onClick={this.goToUpdate}>
+                                onClick={goToUpdate}>
                             수정
                         </Button> &nbsp;
                         <Button size='sm'
-                                onClick={() => this.deleteView()}>
+                                onClick={() => deleteView()}>
                             삭제
                         </Button>
                     </div>
@@ -196,21 +178,21 @@ class Post extends Component {
                         <textarea
                             id='post-writecomment'
                             placeholder='불쾌감을 주는 욕설과 악플은 삭제될 수 있습니다.'
-                            onChange={this.changeTextHandler} 
-                            onKeyUp={this.checkValid}
+                            onChange={changeTextHandler} 
+                            onKeyUp={checkValid}
                             >
                         </textarea>
                         <div className='post-commentwrite-btn-wrapper'>
                             {/* 로그인 한 사용자만 작성 가능하게 */}
                             <Button size='sm' className='post-comment-btn'
-                                onClick={() => this.createComment()}
+                                onClick={() => createComment()}
                             >
                                 등록
                             </Button>
                         </div>
                     </div>
                     {
-                        this.state.comments.map((comment) => (
+                        comments.map((comment) => (
                             <div className='post-comment'>
                                 <hr />
                                 <div className='post-comment-header'>
@@ -220,32 +202,32 @@ class Post extends Component {
                                         : <span className='post-comment-date'>{comment.updated_time.substring(0, 16)} <span className='post-comment-updatedmsg'>수정됨</span></span> }
                                 </div>
                                 <div className='post-comment-contents'>
-                                    {!this.state.updating.now && <span className='post-comment-text'>{comment.text}</span> }
-                                    {this.state.updating.now && this.state.updating.commentNo === comment.no &&
+                                    {!updating.now && <span className='post-comment-text'>{comment.text}</span> }
+                                    {updating.now && updating.commentNo === comment.no &&
                                         <div className='post-updatecomment-wrapper'>
                                             <textarea
                                                 id='post-updatecomment'
                                                 placeholder='불쾌감을 주는 욕설과 악플은 삭제될 수 있습니다.'
                                                 defaultValue={comment.text}
-                                                onChange={this.changeTextHandler}
-                                                onKeyUp={this.checkUpdateValid}>
+                                                onChange={changeTextHandler}
+                                                onKeyUp={checkUpdateValid}>
                                             </textarea>
                                             <div className='post-commentupdate-btn-wrapper'>
                                                 <Button className="post-commentupdate-btn btn-round ml-1" 
-                                                    onClick={() => this.updateComment(comment.no)}>
+                                                    onClick={() => updateComment(comment.no)}>
                                                     등록
                                                 </Button>
                                             </div>
                                         </div>
                                     }
-                                    {this.state.updating.now && this.state.updating.commentNo !== comment.no &&
+                                    {updating.now && updating.commentNo !== comment.no &&
                                         <span className='post-comment-text'>{comment.text}</span>
                                     }
                                 </div>
-                                {!this.state.updating.now &&
+                                {!updating.now &&
                                     <div className='post-comment-btn-wrapper'>
-                                        <Button className="post-comment-btn-edit" onClick={() => this.changeUpdating(comment.no)}>수정</Button>
-                                        <Button className="post-comment-btn-cancel" onClick={() => this.deleteComment(comment.no)}>삭제</Button>
+                                        <Button className="post-comment-btn-edit" onClick={() => changeUpdating(comment.no)}>수정</Button>
+                                        <Button className="post-comment-btn-cancel" onClick={() => deleteComment(comment.no)}>삭제</Button>
                                     </div>
                                 }
                             </div>
@@ -254,14 +236,13 @@ class Post extends Component {
                     </div>
                     <div className='post-gotolist-btn-wrapper'>
                         <Button size='sm' className="post-btn"
-                            onClick={this.goToList.bind(this)}>
+                            onClick={goToList.bind()}>
                             목록
                         </Button>
                     </div>
             </div>  
-            </>
-        );
-    }
-}
+        </>
+    );
+};
 
 export default Post;

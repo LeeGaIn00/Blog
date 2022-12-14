@@ -98,7 +98,8 @@ public class PostController {
 
         // delete file
         for(String f: fileDto.getFilePath()) {
-            File file = new File("/Users/gain/Blog/front/public" + f);
+//            File file = new File("/Users/gain/Blog/front/public" + f);
+            File file = new File("/Users/user/Projects/Blog/front/public" + f);
             if(file.exists()) {
                 file.delete();
                 System.out.println(f + " 삭제 완료");

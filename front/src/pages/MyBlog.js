@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Table, Button } from 'reactstrap';
 
 // icons
@@ -13,7 +13,6 @@ import MyBlogHeader from "../components/MyBlogHeader";
 
 // service
 import PostService from '../service/PostService';
-import MemberService from '../service/MemberService';
 
 const cateData = {
     cat0 : '전체',
@@ -25,239 +24,214 @@ const cateData = {
 
 let selectCate;
 
-class MyBlog extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { 
-            serchClick:false,
-            searchInput:'',
-            orgs:[],
-            id: this.props.match.params.id,
-            profile: '',
-            posts: [],
-            orgPosts: [],
-            curCate: cateData['cat0']
-        }
-		this.createPost = this.createPost.bind(this);
-    }
+const MyBlog = (props) => {
+    const [searchClick, setSearchClick] = useState(false);
+    const [searchInput, setSearchInput] = useState('');
+    const [orgs, setOrgs] = useState([]);
+    const [profile, setProfile] = useState('');
+    const [posts, setPosts] = useState([]);
+    const [orgPosts, setOrgPosts] = useState([]);
+    const [curCate, setCurCate] = useState('cat0');
+    const id = props.match.params.id;
 
-    componentDidMount() {
+    useEffect(() => {
         // member 별로 curCate 구분하기 위해 id 붙여서 session에 저장
-        selectCate = sessionStorage.getItem("curCate"+"_"+this.state.id) === null ? cateData['cat0'] : JSON.parse(sessionStorage.getItem("curCate"+"_"+this.state.id));
-
-        PostService.getAllPost(this.state.id, selectCate).then((res) => {
-            this.setState({ 
-                posts: res.data,
-                orgPosts: res.data,
-                curCate: selectCate
-            });
+        selectCate = sessionStorage.getItem("curCate"+"_"+id) === null ? cateData['cat0'] : JSON.parse(sessionStorage.getItem("curCate"+"_"+id));
+        
+        PostService.getAllPost(id, selectCate).then((res) => {
+            setPosts(res.data);
+            setOrgPosts(res.data);
+            setCurCate(selectCate);
         });
-    }
+    }, []);
 
-    /* input 창에 onChange 이벤트 */
-    setSearchHandler = (e) => {
-        this.setState({
-            searchInput: e.target.value
-        })
+     /* input 창에 onChange 이벤트 */
+    const setSearchHandler = (e) => {
+        setSearchInput(e.target.value);
     }
 
     /* enter 입력 시 글 제목과 검색 결과 비교 & 필터링 */
-    handleKeyPress = (e) => {
+    const handleKeyPress = (e) => {
         if (e.key === "Enter") {
-            {this.state.searchInput.startsWith("#") ? 
+            {searchInput.startsWith("#") ? 
             // Tag 검색
-            PostService.getSearchPostByTag(this.state.id, this.state.curCate, this.state.searchInput.substring(1)).then((res) => {
-                this.setState({
-                    posts: res.data
-                })
+            PostService.getSearchPostByTag(id, curCate, searchInput.substring(1)).then((res) => {
+                setPosts(res.data);
             })
-            : PostService.getSearchPost(this.state.id, this.state.curCate, this.state.searchInput).then((res) => {
-                this.setState({
-                    posts: res.data
-                })
+            : PostService.getSearchPost(id, curCate, searchInput).then((res) => {
+                setPosts(res.data);
            }); } 
         }
     };
 
-     /* 찾기 버튼 클릭 시 글 제목과 검색 결과 비교 & 필터링 */
-     setSearchContent = (e) => { 
-        {this.state.searchInput.startsWith("#") ? 
+    /* 찾기 버튼 클릭 시 글 제목과 검색 결과 비교 & 필터링 */
+    const setSearchContent = (e) => { 
+        {searchInput.startsWith("#") ? 
             // Tag 검색
-            PostService.getSearchPostByTag(this.state.id, this.state.curCate, this.state.searchInput.substring(1)).then((res) => {
-                this.setState({
-                    posts: res.data
-                })
+            PostService.getSearchPostByTag(id, curCate, searchInput.substring(1)).then((res) => {
+                setPosts(res.data);
             })
-            : PostService.getSearchPost(this.state.id, this.state.curCate, this.state.searchInput).then((res) => {
-                this.setState({
-                    posts: res.data
-                })
+            : PostService.getSearchPost(id, curCate, searchInput).then((res) => {
+                setPosts(res.data);
            });
         }
     }
 
-    searchInputRemoveHandler = (e) => {
-        this.setState({
-            searchInput: '',
-            posts: this.state.orgPosts
-        })
+    const searchInputRemoveHandler = (e) => {
+        setSearchInput('');
+        setPosts(orgPosts);
     }
 
-    createPost = () => {
-        this.props.history.push({
+    const createPost = () => {
+        props.history.push({
             pathname: "/create-post/_create",
-            state: {id: this.state.id}
+            state: {id: id}
         })
     };
 
     /* 글 상세보기로 이동 */
-    readPost(no) {
+    const readPost = (no) => {
         /* 조회수 증가 */
         // PostService.getPost(no);
-        this.props.history.push({
+        props.history.push({
             pathname: `/post-detail/${no}`,
-            state: {id: this.state.id}
+            state: {id: id}
         });
     }
 
      /* 카테고리 onClick 이벤트. 카테고리 변경 및 sessionStorage에 state 저장 */
-    changeCate = (e) => {
-        this.setState({
-            curCate: e.target.textContent,
-            searchInput: ''
+    const changeCate = (e) => {
+        setCurCate(e.target.textContent);
+        setSearchInput('');
+        PostService.getAllPost(id, e.target.textContent).then((res) => {
+            setPosts(res.data);
+            setOrgPosts(res.data);
+            //setCurCate(e.target.textContent)
         });
-        PostService.getAllPost(this.state.id, e.target.textContent).then((res) => {
-            this.setState({ 
-                posts: res.data,
-                orgPosts: res.data,
-                //curCate: e.target.textContent
-            });
-        });
-        sessionStorage.setItem("curCate"+"_"+this.state.id, JSON.stringify(e.target.textContent));
+        sessionStorage.setItem("curCate"+"_"+id, JSON.stringify(e.target.textContent));
     };
 
     // 글 목록 미리보기에서 이미지를 제외한 텍스트만 보여지도록 가공
-    textHandler = (text) => {
+    const textHandler = (text) => {
         var parser = new DOMParser();
         var doc = parser.parseFromString(text, 'text/html');
         return doc.getElementsByTagName('p')[0].textContent;
     }
 
-    render() {
-        return (
-            <>
-                <MyBlogHeader id={this.state.id} />
-                <div className="mb-main">
-                    <div className="mb-cate">
-                        <button 
-                            id="cat0" 
-                            type="button" 
-                            className={`ml-1 btn ${this.state.curCate === cateData['cat0'] ? 'active' : ''}`}
-                            onClick = {this.changeCate}
-                        >
-                            {cateData['cat0']}
-                        </button>
-                        <button 
-                            id="cat1" 
-                            type="button" 
-                            className={`ml-1 btn ${this.state.curCate === cateData['cat1'] ? 'active' : ''}`}
-                            onClick = {this.changeCate}
-                        >
-                            {cateData['cat1']}
-                        </button>
-                        <button 
-                            id="cat2" 
-                            type="button" 
-                            className={`ml-1 btn ${this.state.curCate === cateData['cat2'] ? 'active' : ''}`}
-                            onClick = {this.changeCate}
-                        >
-                            {cateData['cat2']}
-                        </button>
-                        <button 
-                            id="cat3" 
-                            type="button" 
-                            className={`ml-1 btn ${this.state.curCate === cateData['cat3'] ? 'active' : ''}`}
-                            onClick = {this.changeCate}
-                        >
-                            {cateData['cat3']}
-                        </button>
-                        <button 
-                            id="cat4" 
-                            type="button" 
-                            className={`ml-1 btn ${this.state.curCate === cateData['cat4'] ? 'active' : ''}`}
-                            onClick = {this.changeCate}
-                        >
-                            {cateData['cat4']}
-                        </button>
-                    </div>
-                    <div className="search-bar">
-                        <input type="search" placeholder="검색" value={this.state.searchInput}
-                            onChange={this.setSearchHandler} onKeyPress={this.handleKeyPress}/>
-                        <span className='post-search-icon' onClick={this.setSearchContent} style={{cursor: 'pointer'}}> 
-                            <FontAwesomeIcon icon={faMagnifyingGlass} /> 
-                        </span>
-                        {this.state.searchInput.length !== 0 &&
-                            <button className="btn-clear" onClick={this.searchInputRemoveHandler}>
-                                <FontAwesomeIcon className="removeIcon" icon={faCircleXmark} />
-                            </button> 
-                        }    
-                    </div>
-                    <div className="mb-tb-wrap">
-                        <div className="mb-tb-capt">
-                            <span>
-                                전체 글 목록
-                            </span>
-                            <span>
-                                <Button size="sm" onClick={this.createPost}>
-                                    글 작성
-                                </Button>
-                            </span>
-                        </div>
-                        <Table className="mb-tb" borderless>
-                            <tbody>
-                                { this.state.posts.map (
-                                    post =>
-                                    <>
-                                    {post.thumbnail != null ?
-                                        <tr onClick={() => this.readPost(post.no)}>
-                                            <th scope="row" rowSpan={2}>
-                                                <img src={`${process.env.PUBLIC_URL}${post.thumbnail}`}/> 
-                                            </th>
-                                            <td className="mb-tb-title">
-                                                {post.title}
-                                            </td>
-                                            <td className="mb-tb-date" rowSpan={2}>
-                                                {post.createdTime.substring(0, 10)}
-                                            </td>
-                                        </tr> :
-                                         <tr onClick={() => this.readPost(post.no)}>
-                                            <td className="mb-tb-title">
-                                                {post.title}
-                                            </td>
-                                            <td></td>
-                                            <td className="mb-tb-date" rowSpan={2}>
-                                                {post.createdTime.substring(0, 10)}
-                                            </td>
-                                        </tr>  }
-                                    {post.thumbnail != null ? 
-                                        <tr onClick={() => this.readPost(post.no)}>
-                                            <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: this.textHandler(post.text) }}>
-                                            </td>
-                                        </tr> :
-                                        <tr onClick={() => this.readPost(post.no)}>
-                                            <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: this.textHandler(post.text) }} colSpan={2}>
-                                            </td>
-                                        </tr> }
-                                    </>
-                                    )
-                                }
-                            </tbody>
-                        </Table>
-                    </div>
+
+    return (
+        <>
+            <MyBlogHeader id={id} />
+            <div className="mb-main">
+                <div className="mb-cate">
+                    <button 
+                        id="cat0" 
+                        type="button" 
+                        className={`ml-1 btn ${curCate === cateData['cat0'] ? 'active' : ''}`}
+                        onClick = {changeCate}
+                    >
+                        {cateData['cat0']}
+                    </button>
+                    <button 
+                        id="cat1" 
+                        type="button" 
+                        className={`ml-1 btn ${curCate === cateData['cat1'] ? 'active' : ''}`}
+                        onClick = {changeCate}
+                    >
+                        {cateData['cat1']}
+                    </button>
+                    <button 
+                        id="cat2" 
+                        type="button" 
+                        className={`ml-1 btn ${curCate === cateData['cat2'] ? 'active' : ''}`}
+                        onClick = {changeCate}
+                    >
+                        {cateData['cat2']}
+                    </button>
+                    <button 
+                        id="cat3" 
+                        type="button" 
+                        className={`ml-1 btn ${curCate === cateData['cat3'] ? 'active' : ''}`}
+                        onClick = {changeCate}
+                    >
+                        {cateData['cat3']}
+                    </button>
+                    <button 
+                        id="cat4" 
+                        type="button" 
+                        className={`ml-1 btn ${curCate === cateData['cat4'] ? 'active' : ''}`}
+                        onClick = {changeCate}
+                    >
+                        {cateData['cat4']}
+                    </button>
                 </div>
-            </>
-        );
-    }
-}
+                <div className="search-bar">
+                    <input type="search" placeholder="검색" value={searchInput}
+                        onChange={setSearchHandler} onKeyPress={handleKeyPress}/>
+                    <span className='post-search-icon' onClick={setSearchContent} style={{cursor: 'pointer'}}> 
+                        <FontAwesomeIcon icon={faMagnifyingGlass} /> 
+                    </span>
+                    {searchInput.length !== 0 &&
+                        <button className="btn-clear" onClick={searchInputRemoveHandler}>
+                            <FontAwesomeIcon className="removeIcon" icon={faCircleXmark} />
+                        </button> 
+                    }    
+                </div>
+                <div className="mb-tb-wrap">
+                    <div className="mb-tb-capt">
+                        <span>
+                            전체 글 목록
+                        </span>
+                        <span>
+                            <Button size="sm" onClick={createPost}>
+                                글 작성
+                            </Button>
+                        </span>
+                    </div>
+                    <Table className="mb-tb" borderless>
+                        <tbody>
+                            { posts.map (
+                                post =>
+                                <>
+                                {post.thumbnail != null ?
+                                    <tr onClick={() => readPost(post.no)}>
+                                        <th scope="row" rowSpan={2}>
+                                            <img src={`${process.env.PUBLIC_URL}${post.thumbnail}`}/> 
+                                        </th>
+                                        <td className="mb-tb-title">
+                                            {post.title}
+                                        </td>
+                                        <td className="mb-tb-date" rowSpan={2}>
+                                            {post.createdTime.substring(0, 10)}
+                                        </td>
+                                    </tr> :
+                                        <tr onClick={() => readPost(post.no)}>
+                                        <td className="mb-tb-title">
+                                            {post.title}
+                                        </td>
+                                        <td></td>
+                                        <td className="mb-tb-date" rowSpan={2}>
+                                            {post.createdTime.substring(0, 10)}
+                                        </td>
+                                    </tr>  }
+                                {post.thumbnail != null ? 
+                                    <tr onClick={() => readPost(post.no)}>
+                                        <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: textHandler(post.text) }}>
+                                        </td>
+                                    </tr> :
+                                    <tr onClick={() => readPost(post.no)}>
+                                        <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: textHandler(post.text) }} colSpan={2}>
+                                        </td>
+                                    </tr> }
+                                </>
+                                )
+                            }
+                        </tbody>
+                    </Table>
+                </div>
+            </div>
+        </>
+    );
+};
 
 export default MyBlog;
