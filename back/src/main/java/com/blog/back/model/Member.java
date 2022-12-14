@@ -1,5 +1,6 @@
 package com.blog.back.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -17,6 +18,7 @@ public class Member {
     @Id
     private String id;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 

@@ -14,12 +14,11 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = ({ children }) => {
-
   const tokenData = authService.retrieveStoredToken();
 
   let initialToken;
   if (tokenData) {
-    initialToken = !tokenData.token;
+    initialToken = tokenData.token;
   }
 
   const [token, setToken] = useState(initialToken);
@@ -29,6 +28,7 @@ export const AuthContextProvider = ({ children }) => {
   const [isGetSuccess, setIsGetSuccess ] = useState(false);
 
   const userIsLoggedIn = !!token;
+  
   var logoutTimer;
   
   const signupHandler = (member) => {
@@ -43,10 +43,17 @@ export const AuthContextProvider = ({ children }) => {
 
   const loginHandler = (id, password) => {
     setIsSuccess(false);
-    console.log(isSuccess);
     
     const data = authService.loginActionHandler(id, password);
     data.then((res) => {
+      // if(res && res.data.error) {
+      //   console.log("아이디 또는 비밀번호를 확인해주세요");
+      //   return null;
+      // }
+      // else if (!res) {
+      //   alert("로그인 오류!");
+      //   return null;
+      // }
       if (res && !res.data.error) {
         const loginData = res.data;
         setToken(loginData.accessToken);
@@ -55,9 +62,8 @@ export const AuthContextProvider = ({ children }) => {
           authService.loginTokenHandler(loginData.accessToken, loginData.tokenExpiresIn)
         );
         setIsSuccess(true);
-        console.log(isSuccess);
       }
-    })
+    }).catch((err) => {alert("아이디 또는 비밀번호를 확인해주세요");});
   };
 
   const logoutHandler = useCallback(() => {
@@ -73,7 +79,6 @@ export const AuthContextProvider = ({ children }) => {
     const data = authService.getUserActionHandler(token);
     data.then((res) => {
       if (res && !res.data.error) {
-        console.log('get user start!');
         setUserId(res.data.id);
         setIsGetSuccess(true);
       }
@@ -81,13 +86,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("useEffect => " + isSuccess);
-  }, [isSuccess]);
-
-
-  useEffect(() => {
     if(tokenData) {
-      console.log(tokenData.duration);
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
     }
   }, [tokenData, logoutHandler]);
@@ -96,7 +95,7 @@ export const AuthContextProvider = ({ children }) => {
   const contextValue = {
     token,
     userId,
-    isLoggedIn: userIsLoggedIn,
+    isLoggedIn : userIsLoggedIn,
     isSuccess,
     isGetSuccess,
     signup: signupHandler,

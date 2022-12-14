@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -29,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
 
         return new User(
-                String.valueOf(member.getId()),
+                member.getId(),
                 member.getPassword(),
                 Collections.singleton(grantedAuthority)
         );
