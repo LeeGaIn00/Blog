@@ -107,6 +107,7 @@
             border-bottom: 1px solid gray;
             border-collapse: collapse;
             vertical-align: middle;
+            table-layout: fixed;
             th, td:not(.mb-tb-txt) {
                 border-top: 1px solid gray;
             }
@@ -114,6 +115,11 @@
                 text-align: center;
                 width: 130px;
                 height: 80px;
+            }
+            td {
+                overflow:hidden; 
+		        white-space : nowrap;
+                text-overflow: ellipsis;
             }
             img {
                 //width: 100%;
