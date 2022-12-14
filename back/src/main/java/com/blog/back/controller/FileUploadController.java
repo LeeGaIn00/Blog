@@ -22,7 +22,8 @@ public class FileUploadController {
         try {
             for(MultipartFile f: files) {
                 Map<String, Object> m = new HashMap<String, Object>();
-                file = new File("/Users/gain/Blog/front/public/img/" + f.getOriginalFilename());
+//                file = new File("/Users/gain/Blog/front/public/img/" + f.getOriginalFilename());
+                file = new File("/Users/user/Projects/Blog/front/public/img/" + f.getOriginalFilename());
                 InputStream fileStream = f.getInputStream();
                 FileUtils.copyInputStreamToFile(fileStream, file);
 
