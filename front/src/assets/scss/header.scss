@@ -2,7 +2,7 @@
     padding: 10px 20px 20px 20px; // 위 오 아 왼
     margin: 10px 15%; // 세 가
     min-width: 700px;
-    
+
     .hdr-wrap {
         padding-bottom: 30px;
         span {
@@ -20,4 +20,8 @@
             }
         }
     }
+}
+
+.nav-link {
+    cursor: pointer;
 }

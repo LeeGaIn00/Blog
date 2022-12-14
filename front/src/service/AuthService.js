@@ -18,15 +18,6 @@ const calculateRemainingTime = (expirationTime) => {
 };
 
 class AuthService {
-    /* 회원가입 */
-    // signUp(member) {
-    //     return axios.post(AUTH_API_BASE_URL + "/signup", member);
-    // }
-    /* 로그인 */
-    // login(member) {
-    //     return axios.post(AUTH_API_BASE_URL + "/login", member);
-    // }
-
     loginTokenHandler = (token, expirationTime) => {
         localStorage.setItem('token', token);
         localStorage.setItem('expirationTime', String(expirationTime));
@@ -58,7 +49,7 @@ class AuthService {
     };
     
     loginActionHandler = (id, password) => {
-        let loginObject = { id, password };
+        const loginObject = { id, password };
         return axios.post(AUTH_API_BASE_URL + "/login", loginObject, {});
     };
     

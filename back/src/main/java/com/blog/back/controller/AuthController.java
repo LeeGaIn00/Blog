@@ -24,6 +24,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody MemberRequestDto requestDto) {
+        System.out.println("디버깅 requestDto password : " + requestDto.getPassword());
         return ResponseEntity.ok(authService.login(requestDto));
     }
 }

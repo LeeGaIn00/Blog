@@ -1,10 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
+import { useLocation } from 'react-router-dom';
 
-import AuthContext from '../service/AuthContext'
+// styles
+import "../assets/scss/header.scss";
+
+import AuthContext from '../service/AuthContext';
 
 function HeaderNavs(props) {
     const authCtx = useContext(AuthContext);
+    const curPath = useLocation().pathname;
     const [id, setId] = useState('');
     let isLogin = authCtx.isLoggedIn;
     let isGet = authCtx.isGetSuccess;
@@ -15,25 +20,33 @@ function HeaderNavs(props) {
 
     useEffect(() => {
         if (isLogin) {
-            console.log('start');
             authCtx.getUser();
-        } 
+        }
     }, [isLogin]);
     
     useEffect(() => {
         if (isGet) {
-            console.log('get start');
             callback(authCtx.userId);
         }
     }, [isGet]);
 
     const toggleLogoutHandler = () => {
         authCtx.logout();
+        alert("로그아웃 되었습니다");
     };
-    
+
     return (
         <div>
             <Nav className="justify-content-end">
+                {curPath !== "/index" &&
+                    <NavItem>
+                        <NavLink
+                        href="/index"
+                        >
+                        메인홈
+                        </NavLink>
+                    </NavItem>
+                }
                 {!isLogin && 
                     <NavItem>
                         <NavLink
@@ -52,7 +65,7 @@ function HeaderNavs(props) {
                         </NavLink>
                     </NavItem>
                 }
-                {isLogin &&
+                {(isLogin && curPath !== `/myblog/${id}`) &&
                     <NavItem>
                         <NavLink
                             href={`/myblog/${id}`}
@@ -65,7 +78,6 @@ function HeaderNavs(props) {
                     <NavItem>
                         <NavLink
                             onClick={toggleLogoutHandler}
-                            href="/login"
                         >
                         로그아웃
                         </NavLink>
