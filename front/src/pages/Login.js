@@ -80,8 +80,8 @@ const Login = (props) => {
                 <div className="otherbtns" >
                   {/* 회원가입 */}
                   <Button
+                    block
                     className="signup-btn"
-                    color="danger"
                     href="/register"
                     onClick={(e) => window.location.href = "/register"}
                   >

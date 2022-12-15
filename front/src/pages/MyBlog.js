@@ -14,6 +14,8 @@ import MyBlogHeader from "../components/MyBlogHeader";
 // service
 import PostService from '../service/PostService';
 
+import AuthContext from '../service/AuthContext';
+
 const cateData = {
     cat0 : '전체',
     cat1 : '일상',
@@ -33,6 +35,8 @@ const MyBlog = (props) => {
     const [orgPosts, setOrgPosts] = useState([]);
     const [curCate, setCurCate] = useState('cat0');
     const id = props.match.params.id;
+    const authCtx = useContext(AuthContext);
+    const isLogin = authCtx.isLoggedIn;
 
     useEffect(() => {
         // member 별로 curCate 구분하기 위해 id 붙여서 session에 저장
@@ -43,7 +47,24 @@ const MyBlog = (props) => {
             setOrgPosts(res.data);
             setCurCate(selectCate);
         });
+        // if(authCtx.isLoggedIn) {
+        //     authCtx.getUser();
+        //     if(authCtx.userId === id) {
+        //         setIsMe(true)
+        //     } else {
+        //         setIsMe(false);
+        //     }
+        // } else {
+        //     setIsMe(false);
+        // }
     }, []);
+
+    useEffect(() => {
+        if(isLogin) {
+            authCtx.getUser();
+            console.log(authCtx.userId);
+        }
+    }, [isLogin]);
 
      /* input 창에 onChange 이벤트 */
     const setSearchHandler = (e) => {
@@ -182,11 +203,14 @@ const MyBlog = (props) => {
                         <span>
                             전체 글 목록
                         </span>
-                        <span>
-                            <Button size="sm" onClick={createPost}>
-                                글 작성
-                            </Button>
-                        </span>
+                        {
+                        (isLogin && authCtx.userId === id) &&
+                            <span>
+                                <Button size="sm" onClick={createPost}>
+                                    글 작성
+                                </Button>
+                            </span>
+                        }
                     </div>
                     <Table className="mb-tb" borderless>
                         <tbody>

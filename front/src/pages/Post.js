@@ -12,6 +12,8 @@ import '../assets/scss/post.scss';
 // service
 import PostService from '../service/PostService.js';
 
+import AuthContext from '../service/AuthContext';
+
 const Post = (props) => {
     const id = props.location.state.id;
     const no = props.match.params.no;
@@ -20,6 +22,8 @@ const Post = (props) => {
     const [comments, setComments] = useState([]);
     const [text, setText] = useState('');
     const [updating, setUpdating] = useState({now:false, commentNo:''});
+    const authCtx = useContext(AuthContext);
+    let isLogin = authCtx.isLoggedIn;
     
     useEffect(() => {
         PostService.getPost(no).then(res => {
@@ -31,8 +35,15 @@ const Post = (props) => {
             console.log(res.data);
         })
         window.scrollTo(0, 0);
-        document.querySelector('.post-comment-btn').disabled = true;
+        // document.querySelector('.post-comment-btn').disabled = true;
     }, []);
+
+    useEffect(() => {
+        if(isLogin) {
+            authCtx.getUser();
+            console.log(authCtx.userId);
+        }
+    }, [isLogin]);
     
     /* 글 수정으로 이동 */
     const goToUpdate = (event) => {
@@ -67,7 +78,7 @@ const Post = (props) => {
     const createComment = () => {
         let comment = {
             postNo: no,
-            memberId: id,
+            memberId: authCtx.userId,
             text: text,
             orgText: text
         }
@@ -93,7 +104,7 @@ const Post = (props) => {
     const updateComment = (commentNo) => {
         let comment = {
             postNo: no,
-            memberId: id,
+            memberId: authCtx.userId,
             //text: text
             text: document.querySelector('#post-updatecomment').value
         }
@@ -157,17 +168,20 @@ const Post = (props) => {
                         </ul>
                     </div>
                     <br />
-                    <div className='post-btn'>
-                        {/* 작성자만 볼 수 있게 */}
-                        <Button size='sm' 
-                                onClick={goToUpdate}>
-                            수정
-                        </Button> &nbsp;
-                        <Button size='sm'
-                                onClick={() => deleteView()}>
-                            삭제
-                        </Button>
-                    </div>
+                    {
+                    (isLogin && authCtx.userId === id) &&
+                        <div className='post-btn'>
+                            {/* 작성자만 볼 수 있게 */}
+                            <Button size='sm' 
+                                    onClick={goToUpdate}>
+                                수정
+                            </Button> &nbsp;
+                            <Button size='sm'
+                                    onClick={() => deleteView()}>
+                                삭제
+                            </Button>
+                        </div>
+                    }
                     <hr />
                 </div>
                 
@@ -182,14 +196,17 @@ const Post = (props) => {
                             onKeyUp={checkValid}
                             >
                         </textarea>
-                        <div className='post-commentwrite-btn-wrapper'>
-                            {/* 로그인 한 사용자만 작성 가능하게 */}
-                            <Button size='sm' className='post-comment-btn'
-                                onClick={() => createComment()}
-                            >
-                                등록
-                            </Button>
-                        </div>
+                        {
+                        isLogin &&
+                            <div className='post-commentwrite-btn-wrapper'>
+                                {/* 로그인 한 사용자만 작성 가능하게 */}
+                                <Button size='sm' className='post-comment-btn'
+                                    onClick={() => createComment()}
+                                >
+                                    등록
+                                </Button>
+                            </div>
+                        }
                     </div>
                     {
                         comments.map((comment) => (
@@ -224,7 +241,7 @@ const Post = (props) => {
                                         <span className='post-comment-text'>{comment.text}</span>
                                     }
                                 </div>
-                                {!updating.now &&
+                                {(!updating.now && isLogin && authCtx.userId === comment.member.id) &&
                                     <div className='post-comment-btn-wrapper'>
                                         <Button className="post-comment-btn-edit" onClick={() => changeUpdating(comment.no)}>수정</Button>
                                         <Button className="post-comment-btn-cancel" onClick={() => deleteComment(comment.no)}>삭제</Button>
