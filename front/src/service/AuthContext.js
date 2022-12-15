@@ -91,7 +91,6 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, [tokenData, logoutHandler]);
 
-
   const contextValue = {
     token,
     userId,
