@@ -10,7 +10,9 @@ const AuthContext = React.createContext({
   signup: (member) =>  {},
   login: (id, password) => {},
   logout: () => {},
-  getUser: () => {}
+  getUser: () => {},
+  changeProfile: (profile) => {},
+  changePassword: (exPassword, newPassword) => {}
 });
 
 export const AuthContextProvider = ({ children }) => {
@@ -85,6 +87,30 @@ export const AuthContextProvider = ({ children }) => {
     })    
   };
 
+  const changeProfileHandler = (profile) => {
+    setIsSuccess(false);
+
+    const data = authAction.changeNicknameActionHandler(profile, token);
+    data.then((res) => {
+      if (res && !res.data.error) {
+        setIsSuccess(true);
+      } else {
+        console.log(res);
+      }
+    })
+  };
+
+  const changePasswordHandler = (exPassword, newPassword) => {
+    setIsSuccess(false);
+    const data = authAction.changePasswordActionHandler(exPassword, newPassword, token);
+    data.then((res) => {
+      if (res && !res.data.error) {
+        setIsSuccess(true);
+        logoutHandler();
+      }
+    })
+  };
+
   useEffect(() => {
     if(tokenData) {
       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
@@ -100,7 +126,9 @@ export const AuthContextProvider = ({ children }) => {
     signup: signupHandler,
     login: loginHandler,
     logout: logoutHandler,
-    getUser: getUserHandler
+    getUser: getUserHandler,
+    changeProfile: changeProfileHandler,
+    changePassword: changePasswordHandler
   }
   
   return(

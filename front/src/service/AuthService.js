@@ -61,6 +61,17 @@ class AuthService {
     getUserActionHandler = (token) => {
         return axios.get("http://localhost:8080/member/me", createTokenHeader(token));
     }
+
+    changeProfileActionHandler = (profile, token) => {
+        const changeProfObj = { profile };
+        return axios.post("http://localhost:8080/member/profile", changeProfObj, createTokenHeader(token));
+    }
+
+    changePasswordActionHandler = (exPassword, newPassword, token) => {
+        const changePwdObj = { exPassword, newPassword }
+        return axios.post("http://localhost:8080/member/password", changePwdObj, createTokenHeader(token));
+    }
+
 }
 
 export default new AuthService();
