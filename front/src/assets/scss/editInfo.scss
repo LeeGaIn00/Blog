@@ -1,37 +1,47 @@
-.ei-wrapper {
-   margin: 50px 250px 0 250px;
-   
-   .ei-profile-wrapper {
-        display: flex;
-        margin-bottom: 20px;
+.ei-body {
+    padding: 10px 20px 20px 20px; // 위 오 아 왼
+    margin: 10px 15%; // 세 가
+    min-width: 700px;
 
-        .ei-profile-title {
-            width: 150px;
-           
+    .ei-profile-main {
+        width: 400px;
+        margin: 80px auto;
+    
+        .ei-profile-wrapper {
+            .ei-img {
+                margin-bottom: 20px;
+                .ei-profile {
+                    width: 100%;
+                }
+                .input-file {
+                    margin-top: 15px;
+                    text-align: left;
+                }
+            }
+    }
+
+    .ei-btn {
+            margin-top: 50px;
+            text-align: right;
+    }
+    }
+
+    .ei-pwd-main {
+        width: 400px;
+        margin: 80px auto;
+        .ei-pwd-wrapper {
+            margin-top: 40px;
+            .ei-pwd-title {
+                margin-bottom: 5px;
+                text-align: left;
+            }
+            input {
+                width: 100%;
+            }
         }
-
-        .ei-profile {
-            height: 100%;
-            width: 210px;
-            //border-radius: 90px;
+        .ei-btn {
+            margin-top: 50px;
+            text-align: right;
         }
-
-        .input-file {
-            margin-top: 5px;
-            text-align: center;
-        }
-   }
-
-   hr {
-        margin: 40px 0 30px 0;
-   }
-
-   .ei-btn {
-        margin-top: 50px;
-        text-align: right;
-
-        input {
-            width: 80px;
-        }
-   }
+    }
 }

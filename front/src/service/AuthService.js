@@ -62,8 +62,8 @@ class AuthService {
         return axios.get("http://localhost:8080/member/me", createTokenHeader(token));
     }
 
-    changeProfileActionHandler = (profile, token) => {
-        const changeProfObj = { profile };
+    changeProfileActionHandler = (exProfile, newProfile, token) => {
+        const changeProfObj = { exProfile, newProfile };
         return axios.post("http://localhost:8080/member/profile", changeProfObj, createTokenHeader(token));
     }
 

@@ -13,7 +13,9 @@ import Index from "./pages/Index.js";
 import Register from './pages/Register.js';
 import Login from './pages/Login.js';
 import MyPage from './pages/MyPage.js';
-import EditInfo from './pages/EditInfo.js'
+// import EditInfo from './pages/EditInfo.js'
+import EditProfile from './pages/EditProfile.js';
+import EditPassword from './pages/EditPassword.js';
 
 // service
 import AuthContext from './service/AuthContext';
@@ -30,8 +32,11 @@ function App() {
       <Route path='/create-post/:no' render={(props) => authCtx.isLoggedIn ? <WritePostPage {...props}/> : < Index {...props} />} />
       <Route path='/register' render={(props) => authCtx.isLoggedIn ? < Index {...props} /> : <Register {...props} />} />
       <Route path='/login' render={(props) => authCtx.isLoggedIn ? < Index {...props} /> : <Login {...props}/> } />
-      <Route path='/mypage/:id' render={(props) => authCtx.isLoggedIn ? < MyPage {...props} /> : <MyPage {...props}/> } />
-      <Route path='/edit-info/:id' render={(props) => authCtx.isLoggedIn ? < EditInfo {...props} /> : <EditInfo {...props}/> } />
+      {/* <Route path='/mypage/:id' render={(props) => authCtx.isLoggedIn ? < MyPage {...props} /> : < Index {...props} /> } />
+      <Route path='/edit-info/:id' render={(props) => authCtx.isLoggedIn ? < EditInfo {...props} /> : < Index {...props} /> } /> */}
+      <Route path='/mypage' render={(props) => authCtx.isLoggedIn ? < MyPage {...props} /> : < Index {...props} /> } />
+      <Route path='/edit-profile' render={(props) => authCtx.isLoggedIn ? < EditProfile {...props} /> : < Index {...props} /> } />
+      <Route path='/edit-password' render={(props) => authCtx.isLoggedIn ? < EditPassword {...props} /> : < Index {...props} /> } />
       <Redirect to="/index" />
     </Switch>
   );

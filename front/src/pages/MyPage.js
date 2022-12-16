@@ -10,26 +10,20 @@ import '../assets/scss/mypage.scss';
 // components
 import HeaderNavs from "../components/HeaderNavs";
 
-// service
-import MemberService from "../service/MemberService";
-
 import AuthContext from '../service/AuthContext';
 
 /* 마이페이지 */
 const MyPage = (props) => {
-    const [user, setUser] = useState({});
-    const id = props.match.params.id;
+    // const id = props.match.params.id;
+    const authCtx = useContext(AuthContext);
 
     useEffect(() => {
-        MemberService.getOneMember(id).then(res => {
-            setUser(res.data);
-            console.log(res.data);
-        })
+        authCtx.getUser();
     }, []);
 
     return (
-        <>
-            <HeaderNavs id={id} />
+        <div className="mypage-body">
+            <HeaderNavs id={authCtx.user.id} />
             <div className="section mypage">
                 <Container className="mypage-container">
                     <Row>
@@ -38,24 +32,26 @@ const MyPage = (props) => {
                                 <img
                                     className="mypage-profile"
                                     alt="profile"
-                                    src={`${process.env.PUBLIC_URL}/${user.profile}`}/>
-                                <span> {user.name} </span>  
+                                    src={`${process.env.PUBLIC_URL}/img/${authCtx.user.profile}`}/>
+                                <span> {authCtx.user.name} </span>  
                             </div>
                             <div className="info-text">
-                                <div className="info-group"> 아이디: {user.id} </div>
-                                <div className="info-group"> 이메일: {user.email} </div>
-                                <div className="info-group"> 전화번호: {user.phone} </div>
+                                <div className="info-group"> 아이디: {authCtx.user.id} </div>
+                                <div className="info-group"> 이메일: {authCtx.user.email} </div>
+                                <div className="info-group"> 전화번호: {authCtx.user.phone} </div>
                             </div>
                             {/* 회원정보 변경 */}
                             <Col className="mypage-order">
-                                <div onClick={() => window.location.href = `/edit-info/${id}`}> <FontAwesomeIcon icon={faPencil} /> 회원정보 변경 </div>
+                                <div onClick={() => window.location.href = "/edit-profile"}> <FontAwesomeIcon icon={faPencil} /> 프로필 사진 변경 </div>
+                            </Col>
+                            <Col className="mypage-order">
+                                <div onClick={() => window.location.href = "/edit-password"}> <FontAwesomeIcon icon={faPencil} /> 비밀번호 변경 </div>
                             </Col>
                         </Col>
                     </Row>
                 </Container>
             </div>
-
-        </>
+        </div>
     );
 }
 

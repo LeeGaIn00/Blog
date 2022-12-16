@@ -18,7 +18,8 @@ function MyBlogHeader(props) {
 
     useEffect(() => {
         MemberService.getProfile(props.id).then((res) => {
-            setImg(require(`../assets/${res.data}`));
+            // setImg(require(`/public/img/${res.data}`));
+            setImg(`${process.env.PUBLIC_URL}/img/${res.data}`);
         })
 
         setId(props.id);

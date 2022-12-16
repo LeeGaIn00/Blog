@@ -41,7 +41,7 @@ const Post = (props) => {
     useEffect(() => {
         if(isLogin) {
             authCtx.getUser();
-            console.log(authCtx.userId);
+            console.log(authCtx.user.id);
         }
     }, [isLogin]);
     
@@ -78,7 +78,7 @@ const Post = (props) => {
     const createComment = () => {
         let comment = {
             postNo: no,
-            memberId: authCtx.userId,
+            memberId: authCtx.user.id,
             text: text,
             orgText: text
         }
@@ -104,7 +104,7 @@ const Post = (props) => {
     const updateComment = (commentNo) => {
         let comment = {
             postNo: no,
-            memberId: authCtx.userId,
+            memberId: authCtx.user.id,
             //text: text
             text: document.querySelector('#post-updatecomment').value
         }
@@ -169,7 +169,7 @@ const Post = (props) => {
                     </div>
                     <br />
                     {
-                    (isLogin && authCtx.userId === id) &&
+                    (isLogin && authCtx.user.id === id) &&
                         <div className='post-btn'>
                             {/* 작성자만 볼 수 있게 */}
                             <Button size='sm' 
@@ -241,7 +241,7 @@ const Post = (props) => {
                                         <span className='post-comment-text'>{comment.text}</span>
                                     }
                                 </div>
-                                {(!updating.now && isLogin && authCtx.userId === comment.member.id) &&
+                                {(!updating.now && isLogin && authCtx.user.id === comment.member.id) &&
                                     <div className='post-comment-btn-wrapper'>
                                         <Button className="post-comment-btn-edit" onClick={() => changeUpdating(comment.no)}>수정</Button>
                                         <Button className="post-comment-btn-cancel" onClick={() => deleteComment(comment.no)}>삭제</Button>

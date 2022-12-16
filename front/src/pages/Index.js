@@ -110,7 +110,7 @@ class Index extends Component {
                           <img
                             className="profile"
                             alt="profile"
-                            src={require(`../assets/${member.profile}`)} 
+                            src={`${process.env.PUBLIC_URL}/img/${member.profile}`} 
                           />
                           </th>
                       </tr>

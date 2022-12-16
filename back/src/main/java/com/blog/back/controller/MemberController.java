@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,11 +61,20 @@ public class MemberController {
 
     @PostMapping("/profile")
     public ResponseEntity<MemberResponseDto> setMemberProfile(@RequestBody ChangeProfileRequestDto request) {
-        return ResponseEntity.ok(memberService.changeMemberProfile(request.getId(), request.getProfile()));
+        // delete exProfile
+//            File file = new File("/Users/gain/Blog/front/public" + request.getExProfile());
+        File file = new File("/Users/user/Projects/Blog/front/public/img/" + request.getExProfile());
+        if(file.exists()) {
+            file.delete();
+            System.out.println(request.getExProfile() + " 삭제 완료");
+        } else {
+            System.out.println("존재하지 않는 파일 : " + file.getName());
+        }
+        return ResponseEntity.ok(memberService.changeMemberProfile(request.getNewProfile()));
     }
 
     @PostMapping("/password")
     public ResponseEntity<MemberResponseDto> setMemberPassword(@RequestBody ChangePasswordRequestDto request) {
-        return ResponseEntity.ok(memberService.changeMemberPassword(request.getId(), request.getExPassword(), request.getNewPassword()));
+        return ResponseEntity.ok(memberService.changeMemberPassword(request.getExPassword(), request.getNewPassword()));
     }
 }

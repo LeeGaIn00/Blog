@@ -49,7 +49,7 @@ const MyBlog = (props) => {
         });
         // if(authCtx.isLoggedIn) {
         //     authCtx.getUser();
-        //     if(authCtx.userId === id) {
+        //     if(authCtx.user.id === id) {
         //         setIsMe(true)
         //     } else {
         //         setIsMe(false);
@@ -62,7 +62,7 @@ const MyBlog = (props) => {
     useEffect(() => {
         if(isLogin) {
             authCtx.getUser();
-            console.log(authCtx.userId);
+            console.log(authCtx.user.id);
         }
     }, [isLogin]);
 
@@ -204,7 +204,7 @@ const MyBlog = (props) => {
                             전체 글 목록
                         </span>
                         {
-                        (isLogin && authCtx.userId === id) &&
+                        (isLogin && authCtx.user.id === id) &&
                             <span>
                                 <Button size="sm" onClick={createPost}>
                                     글 작성

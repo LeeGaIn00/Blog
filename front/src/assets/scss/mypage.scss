@@ -1,35 +1,38 @@
-.mypage {
-   
-    .container {
-        display: flex;
-        justify-content: center;  
+.mypage-body {
+    padding: 10px 20px 20px 20px; // 위 오 아 왼
+    margin: 10px 15%; // 세 가
+    min-width: 700px;
+    .mypage {
+        margin-top: 80px;
+        .container {
+            display: flex;
+            justify-content: center;  
 
-        .mypage-profile {
-            height: 60px;
-            width: 60px;
-            border-radius: 60px;
-        }
-
-        .info-top {
-            text-align: center;
-        }
-
-        .info-text {
-            margin: 30px;
-
-            .info-group {
-                margin-top: 30px;
+            .mypage-profile {
+                height: 60px;
+                width: 60px;
+                border-radius: 60px;
             }
-        }
-    
-        .mypage-order {
-            margin-top: 10px;
-            text-align: center;
+
+            .info-top {
+                text-align: center;
+            }
+
+            .info-text {
+                margin: 30px;
+
+                .info-group {
+                    margin-top: 30px;
+                }
+            }
+        
+            .mypage-order {
+                margin-top: 10px;
+                text-align: center;
+            }
+        
         }
 
-
-    
+        
     }
-
-    
 }
