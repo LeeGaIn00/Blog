@@ -12,6 +12,9 @@ class MemberService {
     getSearchMember(search) {
         return axios.get(MEMBER_API_BASE_URL + "/?search=" + search);
     }
+    getOneMember(id){
+        return axios.get(MEMBER_API_BASE_URL + "/" + id);
+    }
     /* 아이디 중복 검사 */
     checkId(id) {
         return axios.get(MEMBER_API_BASE_URL + "/check/id/" + id);

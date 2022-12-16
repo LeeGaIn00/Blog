@@ -36,7 +36,7 @@ function HeaderNavs(props) {
     };
 
     return (
-        <div>
+        <div className='hdr-main'>
             <Nav className="justify-content-end">
                 {curPath !== "/index" &&
                     <NavItem>
@@ -80,6 +80,15 @@ function HeaderNavs(props) {
                             onClick={toggleLogoutHandler}
                         >
                         로그아웃
+                        </NavLink>
+                    </NavItem>
+                }
+                {(isLogin && curPath !== `/mypage/${id}`) &&
+                    <NavItem>
+                        <NavLink
+                            href={`/mypage/${id}`}
+                        >
+                        마이페이지
                         </NavLink>
                     </NavItem>
                 }
