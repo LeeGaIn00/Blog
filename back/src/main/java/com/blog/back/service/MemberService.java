@@ -37,4 +37,8 @@ public class MemberService {
                 .map(MemberResponseDto::of)
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
     }
+
+    public Optional<Member> getMember(String id) {
+        return memberRepository.findById(id);
+    }
 }

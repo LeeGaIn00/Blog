@@ -18,7 +18,8 @@ class Index extends Component {
         this.state = { 
             members: [],
             serchClick:false,
-            searchInput:''
+            searchInput:'',
+            orgMembers: []
         }
     }
 
@@ -31,7 +32,8 @@ class Index extends Component {
 
       MemberService.getAllMember().then((res) => {
         this.setState({
-          members: res.data
+          members: res.data,
+          orgMembers: res.data
         })
       });
     }
@@ -74,7 +76,7 @@ class Index extends Component {
     searchInputRemoveHandler = (e) => {
         this.setState({
             searchInput:'',
-            posts:this.state.orgPosts
+            members: this.state.orgMembers
         })
     }
 
