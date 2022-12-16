@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -29,6 +30,12 @@ public class MemberController {
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable String id) {
         return memberService.getProfile(id);
+    }
+
+    // get information by id
+    @GetMapping("/{id}")
+    public Optional<Member> getMember(@PathVariable String id) {
+        return memberService.getMember(id);
     }
 
     /* 검색 */

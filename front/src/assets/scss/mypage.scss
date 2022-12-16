@@ -1,0 +1,35 @@
+.mypage {
+   
+    .container {
+        display: flex;
+        justify-content: center;  
+
+        .mypage-profile {
+            height: 60px;
+            width: 60px;
+            border-radius: 60px;
+        }
+
+        .info-top {
+            text-align: center;
+        }
+
+        .info-text {
+            margin: 30px;
+
+            .info-group {
+                margin-top: 30px;
+            }
+        }
+    
+        .mypage-order {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+
+    
+    }
+
+    
+}

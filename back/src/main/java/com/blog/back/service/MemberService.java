@@ -57,4 +57,8 @@ public class MemberService {
         member.setPassword(passwordEncoder.encode((newPassword)));
         return MemberResponseDto.of(memberRepository.save(member));
     }
+    
+    public Optional<Member> getMember(String id) {
+        return memberRepository.findById(id);
+    }
 }
