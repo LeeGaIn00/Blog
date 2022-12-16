@@ -26,7 +26,8 @@ function HeaderNavs(props) {
     
     useEffect(() => {
         if (isGet) {
-            callback(authCtx.userId);
+            // callback(authCtx.userId);
+            callback(authCtx.user.id);
         }
     }, [isGet]);
 
@@ -36,7 +37,7 @@ function HeaderNavs(props) {
     };
 
     return (
-        <div className='hdr-main'>
+        <div className='hdr-navs-main'>
             <Nav className="justify-content-end">
                 {curPath !== "/index" &&
                     <NavItem>

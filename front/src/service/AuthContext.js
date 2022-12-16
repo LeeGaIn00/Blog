@@ -3,7 +3,8 @@ import authService from './AuthService';
 
 const AuthContext = React.createContext({
   token: '',
-  userId: '',
+  // userId: '',
+  user: {},
   isLoggedIn: false,
   isSuccess: false,
   isGetSuccess: false,
@@ -24,7 +25,8 @@ export const AuthContextProvider = ({ children }) => {
   }
 
   const [token, setToken] = useState(initialToken);
-  const [userId, setUserId] = useState('');
+  // const [userId, setUserId] = useState('');
+  const [user, setUser] = useState({});
   
   const [isSuccess, setIsSuccess] = useState(false);
   const [isGetSuccess, setIsGetSuccess ] = useState(false);
@@ -48,14 +50,6 @@ export const AuthContextProvider = ({ children }) => {
     
     const data = authService.loginActionHandler(id, password);
     data.then((res) => {
-      // if(res && res.data.error) {
-      //   console.log("아이디 또는 비밀번호를 확인해주세요");
-      //   return null;
-      // }
-      // else if (!res) {
-      //   alert("로그인 오류!");
-      //   return null;
-      // }
       if (res && !res.data.error) {
         const loginData = res.data;
         setToken(loginData.accessToken);
@@ -81,34 +75,36 @@ export const AuthContextProvider = ({ children }) => {
     const data = authService.getUserActionHandler(token);
     data.then((res) => {
       if (res && !res.data.error) {
-        setUserId(res.data.id);
+        // setUserId(res.data.id);
+        setUser(res.data);
         setIsGetSuccess(true);
       }
     })    
   };
 
-  const changeProfileHandler = (profile) => {
+  const changeProfileHandler = (newProfile) => {
     setIsSuccess(false);
 
-    const data = authAction.changeNicknameActionHandler(profile, token);
+    const data = authService.changeProfileActionHandler(user.profile, newProfile, token);
     data.then((res) => {
       if (res && !res.data.error) {
         setIsSuccess(true);
       } else {
         console.log(res);
       }
-    })
+    }).catch((err) => {alert("프로필 변경에 실패하였습니다");});
   };
 
   const changePasswordHandler = (exPassword, newPassword) => {
     setIsSuccess(false);
-    const data = authAction.changePasswordActionHandler(exPassword, newPassword, token);
+    const data = authService.changePasswordActionHandler(exPassword, newPassword, token);
     data.then((res) => {
       if (res && !res.data.error) {
         setIsSuccess(true);
-        logoutHandler();
+      } else {
+        console.log(res);
       }
-    })
+    }).catch((err) => {alert("비밀번호가 맞지 않습니다");});
   };
 
   useEffect(() => {
@@ -119,7 +115,8 @@ export const AuthContextProvider = ({ children }) => {
 
   const contextValue = {
     token,
-    userId,
+    // userId,
+    user,
     isLoggedIn : userIsLoggedIn,
     isSuccess,
     isGetSuccess,

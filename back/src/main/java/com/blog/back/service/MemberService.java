@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,14 +43,14 @@ public class MemberService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public MemberResponseDto changeMemberProfile(String id, String profile) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
-        member.setProfile(profile);
+    public MemberResponseDto changeMemberProfile(String newProfile) {
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+        member.setProfile(newProfile);
         return MemberResponseDto.of(memberRepository.save(member));
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public MemberResponseDto changeMemberPassword(String id, String exPassword, String newPassword) {
+    public MemberResponseDto changeMemberPassword(String exPassword, String newPassword) {
         Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
         if(!passwordEncoder.matches(exPassword, member.getPassword())) {
             throw new RuntimeException("비밀번호가 맞지 않습니다");

@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChangeProfileRequestDto {
     private String id;
-    private String profile;
+    private String exProfile;
+    private String newProfile;
 }
