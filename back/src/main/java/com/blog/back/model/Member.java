@@ -39,14 +39,22 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Builder
-    public Member(String id, String password, String name, String email, String phone, Authority authority) {
+    public Member(String id, String password, String name, String email, String phone, String profile, Authority authority) {
         this.id = id;
         this.password = password;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.profile = "img/default.png";
+        this.profile = profile == "" || profile == null ? "img/default.png" : profile;
         this.authority = authority;
     }
 

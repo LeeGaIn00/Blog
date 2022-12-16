@@ -1,8 +1,11 @@
 package com.blog.back.controller;
 
+import com.blog.back.dto.ChangePasswordRequestDto;
+import com.blog.back.dto.ChangeProfileRequestDto;
 import com.blog.back.dto.MemberResponseDto;
 import com.blog.back.model.Member;
 import com.blog.back.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +16,11 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
 
-    @Autowired
-    private MemberService memberService;
-    @Autowired
-    private PasswordEncoder pwEncoder;
+    private final MemberService memberService;
 
     @GetMapping("/index")
     public List<Member> getAllMember() { return memberService.getAllMember(); }
@@ -48,5 +49,15 @@ public class MemberController {
     @GetMapping("/check/email/{email}")
     public ResponseEntity<?> checkEmail(@PathVariable("email") String email) {
         return ResponseEntity.status(HttpStatus.OK).body(memberService.checkEmail(email));
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<MemberResponseDto> setMemberProfile(@RequestBody ChangeProfileRequestDto request) {
+        return ResponseEntity.ok(memberService.changeMemberProfile(request.getId(), request.getProfile()));
+    }
+
+    @PostMapping("/password")
+    public ResponseEntity<MemberResponseDto> setMemberPassword(@RequestBody ChangePasswordRequestDto request) {
+        return ResponseEntity.ok(memberService.changeMemberPassword(request.getId(), request.getExPassword(), request.getNewPassword()));
     }
 }
