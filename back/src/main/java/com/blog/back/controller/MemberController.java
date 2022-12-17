@@ -62,7 +62,7 @@ public class MemberController {
     @PostMapping("/profile")
     public ResponseEntity<MemberResponseDto> setMemberProfile(@RequestBody ChangeProfileRequestDto request) {
         // delete exProfile
-//            File file = new File("/Users/gain/Blog/front/public" + request.getExProfile());
+//            File file = new File("/Users/gain/Blog/front/public/img/" + request.getExProfile());
         File file = new File("/Users/user/Projects/Blog/front/public/img/" + request.getExProfile());
         if(file.exists()) {
             file.delete();

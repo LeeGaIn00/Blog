@@ -51,47 +51,42 @@ const Login = (props) => {
 
   return (
     <div className="login-main">
-        <div className="filter" />
-        <Container>
-          <Row>
-            <Col className="ml-auto mr-auto" lg="4">
-              <Card className="card-register login ml-auto mr-auto" style={{ backgroundColor: "white" }}>
-                <h3 className="login-title">LOGIN</h3>
-                <Form className="register-form">
-                  {/* 아이디 입력 */}
-                  <div className="login-group">
-                    <span className="login-icon"> <FontAwesomeIcon icon={faFingerprint} /> </span>
-                    <Input className='input-login' placeholder="ID" type="text" id="userId" onChange={setIdHandler} />
-                  </div>
-                  {/* 비밀번호 입력 */}
-                  <div className="login-group">
-                    <span className="login-icon"> <FontAwesomeIcon icon={faLock} /> </span>
-                    <Input className='input-login' placeholder="Password" type="password" id="password" onChange={setPasswordHandler} />
-                  </div>
-                  {/* 로그인 버튼 */}
-                  <Button 
-                    block 
-                    className="login-btn" 
-                    onClick={login}
-                  >
-                    LOGIN
-                  </Button>
-                </Form>
-                <div className="otherbtns" >
-                  {/* 회원가입 */}
-                  <Button
-                    block
-                    className="signup-btn"
-                    href="/register"
-                    onClick={(e) => window.location.href = "/register"}
-                  >
-                    SIGN UP
-                  </Button>
-                </div>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+        <div className="ml-auto mr-auto">
+          <Card className="card-register login ml-auto mr-auto" style={{ backgroundColor: "white" }}>
+            <h3 className="login-title">LOGIN</h3>
+            <Form className="register-form">
+              {/* 아이디 입력 */}
+              <div className="login-group">
+                <span className="login-icon"> <FontAwesomeIcon icon={faFingerprint} /> </span>
+                <Input className='input-login' placeholder="ID" type="text" id="userId" onChange={setIdHandler} />
+              </div>
+              {/* 비밀번호 입력 */}
+              <div className="login-group">
+                <span className="login-icon"> <FontAwesomeIcon icon={faLock} /> </span>
+                <Input className='input-login' placeholder="Password" type="password" id="password" onChange={setPasswordHandler} />
+              </div>
+              {/* 로그인 버튼 */}
+              <Button 
+                block 
+                className="login-btn" 
+                onClick={login}
+              >
+                LOGIN
+              </Button>
+            </Form>
+            <div className="otherbtns" >
+              {/* 회원가입 */}
+              <Button
+                block
+                className="signup-btn"
+                href="/register"
+                onClick={(e) => window.location.href = "/register"}
+              >
+                SIGN UP
+              </Button>
+            </div>
+          </Card>
+        </div>
       </div>
   );
 };
