@@ -32,7 +32,7 @@ public class Member {
     private String phone;
 
     @Column(name = "profile")
-    @ColumnDefault("img/default.png")
+    @ColumnDefault("default.png")
     private String profile;
 
     @Column(name = "authority")
@@ -54,7 +54,7 @@ public class Member {
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.profile = profile == "" || profile == null ? "img/default.png" : profile;
+        this.profile = profile == "" || profile == null ? "default.png" : profile;
         this.authority = authority;
     }
 

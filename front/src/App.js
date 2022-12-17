@@ -28,12 +28,9 @@ function App() {
       <Route path="/index" render={(props) => <Index {...props} />} />
       <Route path="/post-detail/:no" render={(props) => <Post {...props} />} />
       <Route path="/myblog/:id" render={(props) => <MyBlog {...props} />} />
-      {/* <Route path='/create-post/:no' component={WritePostPage} /> */}
       <Route path='/create-post/:no' render={(props) => authCtx.isLoggedIn ? <WritePostPage {...props}/> : < Index {...props} />} />
       <Route path='/register' render={(props) => authCtx.isLoggedIn ? < Index {...props} /> : <Register {...props} />} />
       <Route path='/login' render={(props) => authCtx.isLoggedIn ? < Index {...props} /> : <Login {...props}/> } />
-      {/* <Route path='/mypage/:id' render={(props) => authCtx.isLoggedIn ? < MyPage {...props} /> : < Index {...props} /> } />
-      <Route path='/edit-info/:id' render={(props) => authCtx.isLoggedIn ? < EditInfo {...props} /> : < Index {...props} /> } /> */}
       <Route path='/mypage' render={(props) => authCtx.isLoggedIn ? < MyPage {...props} /> : < Index {...props} /> } />
       <Route path='/edit-profile' render={(props) => authCtx.isLoggedIn ? < EditProfile {...props} /> : < Index {...props} /> } />
       <Route path='/edit-password' render={(props) => authCtx.isLoggedIn ? < EditPassword {...props} /> : < Index {...props} /> } />
