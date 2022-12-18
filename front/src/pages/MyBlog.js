@@ -27,14 +27,12 @@ const cateData = {
 let selectCate;
 
 const MyBlog = (props) => {
-    const [searchClick, setSearchClick] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-    const [orgs, setOrgs] = useState([]);
-    const [profile, setProfile] = useState('');
     const [posts, setPosts] = useState([]);
     const [orgPosts, setOrgPosts] = useState([]);
     const [curCate, setCurCate] = useState('cat0');
     const id = props.match.params.id;
+    const [isLoading, setLoading] = useState(true);
     const authCtx = useContext(AuthContext);
     const isLogin = authCtx.isLoggedIn;
 
@@ -46,17 +44,8 @@ const MyBlog = (props) => {
             setPosts(res.data);
             setOrgPosts(res.data);
             setCurCate(selectCate);
+            setLoading(false);
         });
-        // if(authCtx.isLoggedIn) {
-        //     authCtx.getUser();
-        //     if(authCtx.user.id === id) {
-        //         setIsMe(true)
-        //     } else {
-        //         setIsMe(false);
-        //     }
-        // } else {
-        //     setIsMe(false);
-        // }
     }, []);
 
     useEffect(() => {
@@ -74,33 +63,46 @@ const MyBlog = (props) => {
     /* enter 입력 시 글 제목과 검색 결과 비교 & 필터링 */
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
-            {searchInput.startsWith("#") ? 
-            // Tag 검색
-            PostService.getSearchPostByTag(id, curCate, searchInput.substring(1)).then((res) => {
-                setPosts(res.data);
-            })
-            : PostService.getSearchPost(id, curCate, searchInput).then((res) => {
-                setPosts(res.data);
-           }); } 
+            // 검색어가 입력되지 않았을 경우
+            if(searchInput.length < 1) alert('검색어를 입력하세요.')
+            else  {
+                {searchInput.startsWith("#") ? 
+                // Tag 검색
+                PostService.getSearchPostByTag(id, curCate, searchInput.substring(1)).then((res) => {
+                    setPosts(res.data);
+                    setLoading(false);
+                })
+                : PostService.getSearchPost(id, curCate, searchInput).then((res) => {
+                    setPosts(res.data);
+                    setLoading(false);
+               }); } 
+            }
         }
     };
 
     /* 찾기 버튼 클릭 시 글 제목과 검색 결과 비교 & 필터링 */
     const setSearchContent = (e) => { 
-        {searchInput.startsWith("#") ? 
-            // Tag 검색
-            PostService.getSearchPostByTag(id, curCate, searchInput.substring(1)).then((res) => {
-                setPosts(res.data);
-            })
-            : PostService.getSearchPost(id, curCate, searchInput).then((res) => {
-                setPosts(res.data);
-           });
+        // 검색어가 입력되지 않았을 경우
+        if(searchInput.length < 1) alert('검색어를 입력하세요.')
+        else {
+            {searchInput.startsWith("#") ? 
+                // Tag 검색
+                PostService.getSearchPostByTag(id, curCate, searchInput.substring(1)).then((res) => {
+                    setPosts(res.data);
+                    setLoading(false);
+                })
+                : PostService.getSearchPost(id, curCate, searchInput).then((res) => {
+                    setPosts(res.data);
+                    setLoading(false);
+                });
+            }
         }
     }
 
     const searchInputRemoveHandler = (e) => {
         setSearchInput('');
         setPosts(orgPosts);
+        setLoading(false);
     }
 
     const createPost = () => {
@@ -112,8 +114,6 @@ const MyBlog = (props) => {
 
     /* 글 상세보기로 이동 */
     const readPost = (no) => {
-        /* 조회수 증가 */
-        // PostService.getPost(no);
         props.history.push({
             pathname: `/post-detail/${no}`,
             state: {id: id}
@@ -127,7 +127,7 @@ const MyBlog = (props) => {
         PostService.getAllPost(id, e.target.textContent).then((res) => {
             setPosts(res.data);
             setOrgPosts(res.data);
-            //setCurCate(e.target.textContent)
+            setLoading(false);
         });
         sessionStorage.setItem("curCate"+"_"+id, JSON.stringify(e.target.textContent));
     };
@@ -138,7 +138,6 @@ const MyBlog = (props) => {
         var doc = parser.parseFromString(text, 'text/html');
         return doc.getElementsByTagName('p')[0].textContent;
     }
-
 
     return (
         <>
@@ -213,44 +212,47 @@ const MyBlog = (props) => {
                         }
                     </div>
                     <Table className="mb-tb" borderless>
-                        <tbody>
-                            { posts.map (
-                                post =>
-                                <>
-                                {post.thumbnail != null ?
-                                    <tr onClick={() => readPost(post.no)}>
-                                        <th scope="row" rowSpan={2}>
-                                            <img src={`${process.env.PUBLIC_URL}${post.thumbnail}`}/> 
-                                        </th>
-                                        <td className="mb-tb-title">
-                                            {post.title}
-                                        </td>
-                                        <td className="mb-tb-date" rowSpan={2}>
-                                            {post.createdTime.substring(0, 10)}
-                                        </td>
-                                    </tr> :
+                        { !isLoading & posts.length === 0 ?
+                             <div className="mb-noresult"> 검색 결과가 없습니다. </div>
+                         :   <tbody>
+                                { posts.map (
+                                    post =>
+                                    <>
+                                    {post.thumbnail != null ?
                                         <tr onClick={() => readPost(post.no)}>
-                                        <td className="mb-tb-title">
-                                            {post.title}
-                                        </td>
-                                        <td></td>
-                                        <td className="mb-tb-date" rowSpan={2}>
-                                            {post.createdTime.substring(0, 10)}
-                                        </td>
-                                    </tr>  }
-                                {post.thumbnail != null ? 
-                                    <tr onClick={() => readPost(post.no)}>
-                                        <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: textHandler(post.text) }}>
-                                        </td>
-                                    </tr> :
-                                    <tr onClick={() => readPost(post.no)}>
-                                        <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: textHandler(post.text) }} colSpan={2}>
-                                        </td>
-                                    </tr> }
-                                </>
-                                )
-                            }
-                        </tbody>
+                                            <th scope="row" rowSpan={2}>
+                                                <img src={`${process.env.PUBLIC_URL}${post.thumbnail}`}/> 
+                                            </th>
+                                            <td className="mb-tb-title">
+                                                {post.title}
+                                            </td>
+                                            <td className="mb-tb-date" rowSpan={2}>
+                                                {post.createdTime.substring(0, 10)}
+                                            </td>
+                                        </tr> :
+                                            <tr onClick={() => readPost(post.no)}>
+                                            <td className="mb-tb-title">
+                                                {post.title}
+                                            </td>
+                                            <td></td>
+                                            <td className="mb-tb-date" rowSpan={2}>
+                                                {post.createdTime.substring(0, 10)}
+                                            </td>
+                                        </tr>  }
+                                    {post.thumbnail != null ? 
+                                        <tr onClick={() => readPost(post.no)}>
+                                            <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: textHandler(post.text) }}>
+                                            </td>
+                                        </tr> :
+                                        <tr onClick={() => readPost(post.no)}>
+                                            <td className="mb-tb-txt"  dangerouslySetInnerHTML = {{ __html: textHandler(post.text) }} colSpan={2}>
+                                            </td>
+                                        </tr> }
+                                    </>
+                                    )
+                                }
+                            </tbody>
+                        }
                     </Table>
                 </div>
             </div>
