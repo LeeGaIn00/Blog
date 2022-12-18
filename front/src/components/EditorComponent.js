@@ -16,7 +16,7 @@ class EditorComponent extends Component {
                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                 ['bold', 'italic', 'underline','strike', 'blockquote'],
                 [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-                ['link', 'image', 'video'],
+                ['image'],
                 [{ 'align': [] }, { 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
                 ['clean']
             ],
@@ -24,10 +24,6 @@ class EditorComponent extends Component {
             //     image: () => {
                 
             //     },
-            //     video: () => {
-                  
-            //     },
-            // }
         }
     }
         
@@ -46,11 +42,9 @@ class EditorComponent extends Component {
         return (
             <div 
                 className="editor-main"
-                // style={{height: "550px"}}
             >
                 <ReactQuill 
                     className="quill"
-                    // style={{height: "500px"}}
                     theme="snow"
                     modules={this.modules} 
                     formats={this.formats} 

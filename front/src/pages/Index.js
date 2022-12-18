@@ -17,9 +17,10 @@ class Index extends Component {
         super(props);
         this.state = { 
             members: [],
-            serchClick:false,
-            searchInput:'',
-            orgMembers: []
+            serchClick: false,
+            searchInput: '',
+            orgMembers: [],
+            isLoading: true
         }
     }
 
@@ -33,7 +34,8 @@ class Index extends Component {
       MemberService.getAllMember().then((res) => {
         this.setState({
           members: res.data,
-          orgMembers: res.data
+          orgMembers: res.data,
+          isLoading: false
         })
       });
     }
@@ -42,7 +44,6 @@ class Index extends Component {
     readBlog = (id) => {
       this.props.history.push({
         pathname: `/myblog/${id}`,
-        
       });
     }
 
@@ -55,22 +56,30 @@ class Index extends Component {
 
     /* enter 입력 시 글 제목과 검색 결과 비교 & 필터링 */
     handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-          MemberService.getSearchMember(this.state.searchInput).then((res) => {
-            this.setState({
-              members: res.data
-            })
-          });
+        if (e.key === "Enter"  ) {
+          // 검색어가 입력되지 않았을 경우
+          if(this.state.searchInput.length < 1) alert('검색어를 입력하세요.')
+          else {
+            MemberService.getSearchMember(this.state.searchInput).then((res) => {
+              this.setState({
+                members: res.data
+              })
+            });
+          }
         }
     };
 
     /* 찾기 버튼 클릭 시 글 제목과 검색 결과 비교 & 필터링 */
     setSearchContent = (e) => { 
+      // 검색어가 입력되지 않았을 경우
+      if(this.state.searchInput.length < 1) alert('검색어를 입력하세요.')
+      else {
         MemberService.getSearchMember(this.state.searchInput).then((res) => {
           this.setState({
             members: res.data
           })
         });
+      }
     }
 
     searchInputRemoveHandler = (e) => {
@@ -101,33 +110,34 @@ class Index extends Component {
               <span> 모든 블로그 </span>  
             </div>
             <Table className="index-tb" borderless>
-              <tbody>
-                  { this.state.members.map (
-                    member =>
-                    <>
-                      <tr onClick={() => this.readBlog(member.id)}>
-                          <th scope="row" rowSpan={2}>
-                          <img
-                            className="profile"
-                            alt="profile"
-                            src={`${process.env.PUBLIC_URL}/img/${member.profile}`} 
-                          />
-                          </th>
-                      </tr>
-                      <tr onClick={() => this.readBlog(member.id)}>
-                      <td className="index-tb-title">
-                              {member.id}의 블로그
-                          </td>
-                      </tr>
-                    </>
-                  )
-                }
-              </tbody>
+              { !this.state.isLoading & this.state.members.length === 0 ?
+                  <div className="index-noresult"> 검색 결과가 없습니다. </div>
+              : <tbody>
+                    { this.state.members.map (
+                      member =>
+                      <>
+                        <tr onClick={() => this.readBlog(member.id)}>
+                            <th scope="row" rowSpan={2}>
+                            <img
+                              className="profile"
+                              alt="profile"
+                              src={`${process.env.PUBLIC_URL}/img/${member.profile}`} 
+                            />
+                            </th>
+                        </tr>
+                        <tr onClick={() => this.readBlog(member.id)}>
+                        <td className="index-tb-title">
+                                {member.id}의 블로그
+                            </td>
+                        </tr>
+                      </>
+                    )
+                  }
+                </tbody>
+              }
             </Table>
           </div>
         </div>
-       
-    
       );
     }
   }
