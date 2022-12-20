@@ -26,7 +26,7 @@ function MyBlogHeader(props) {
     }, []);
 
     const moveToMain = () => {
-        history.push(`/myblog/${id}`);
+        history.push(`/blog/${id}`);
     };
 
     return (

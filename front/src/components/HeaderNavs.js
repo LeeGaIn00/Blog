@@ -66,10 +66,10 @@ function HeaderNavs(props) {
                         </NavLink>
                     </NavItem>
                 }
-                {(isLogin && curPath !== `/myblog/${id}`) &&
+                {(isLogin && curPath !== `/blog/${id}`) &&
                     <NavItem>
                         <NavLink
-                            href={`/myblog/${id}`}
+                            href={`/blog/${id}`}
                         >
                         내 블로그
                         </NavLink>

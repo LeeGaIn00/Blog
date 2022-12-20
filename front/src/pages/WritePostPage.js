@@ -135,14 +135,14 @@ class WritePostPage extends Component {
                     data.post.text = document.getElementsByClassName('ql-editor')[0].innerHTML;
                 }).then(res => {
                     PostService.createPost(data).then(res => {
-                        this.props.history.push(`/myblog/${this.state.memberId}`);
+                        this.props.history.push(`/blog/${this.state.memberId}`);
                     })
                 }) 
             }
             else {
                  /* 이미지 업로드 x */
                  PostService.createPost(data).then(res => {
-                    this.props.history.push(`/myblog/${this.state.memberId}`);
+                    this.props.history.push(`/blog/${this.state.memberId}`);
                });
             }
         
@@ -185,7 +185,7 @@ class WritePostPage extends Component {
                     data.post.text = document.getElementsByClassName('ql-editor')[0].innerHTML;
                 }).then(res => {
                     PostService.updatePost(this.state.no, data).then(res => {
-                        this.props.history.push(`/myblog/${this.state.memberId}`);
+                        this.props.history.push(`/blog/${this.state.memberId}`);
                     })
                 })  
             }
@@ -193,7 +193,7 @@ class WritePostPage extends Component {
                 data.post.thumbnail = 
                 /* 이미지 업로드 X */
                 PostService.updatePost(this.state.no, data).then(res => {
-                    this.props.history.push(`/myblog/${this.state.memberId}`);
+                    this.props.history.push(`/blog/${this.state.memberId}`);
                 });
             }
         }
@@ -209,7 +209,7 @@ class WritePostPage extends Component {
 
      /* 취소버튼 클릭 시 목록으로 이동 */
      cancel() {
-        this.props.history.push(`/myblog/${this.state.memberId}`);
+        this.props.history.push(`/blog/${this.state.memberId}`);
     }
 
      /* 카테고리 onClick 이벤트. 카테고리 변경 및 sessionStorage에 state 저장 */
