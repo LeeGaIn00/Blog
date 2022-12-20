@@ -66,7 +66,7 @@ const Post = (props) => {
             
             PostService.deletePost(no, {data}).then(res => {
                 if (res.status === 200) {
-                    props.history.push(`/myblog/${id}`);
+                    props.history.push(`/blog/${id}`);
                 } else {
                     alert("글 삭제가 실패했습니다.");
                 }

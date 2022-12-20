@@ -43,7 +43,7 @@ class Index extends Component {
     /* Blog 불러오기 */
     readBlog = (id) => {
       this.props.history.push({
-        pathname: `/myblog/${id}`,
+        pathname: `/blog/${id}`,
       });
     }
 

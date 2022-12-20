@@ -16,11 +16,11 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/post/comment")
 class CommentController {
 
-    @Autowired
-    CommentService commentService;
+    private final CommentService commentService;
 
     @PostMapping("/add")
     public Comment addComment(@RequestBody CommentDto commentDto) {

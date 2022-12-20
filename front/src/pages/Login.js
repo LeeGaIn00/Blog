@@ -38,6 +38,12 @@ const Login = (props) => {
     authCtx.login(id, password);
   }
 
+  const handleKeyPress = e => {
+    if(e.key === 'Enter') {
+      login();
+    }
+  }
+
   useEffect(() => {
     if (firstUpdate.current) {
         firstUpdate.current = false;
@@ -54,7 +60,7 @@ const Login = (props) => {
         <div className="ml-auto mr-auto">
           <Card className="card-register login ml-auto mr-auto" style={{ backgroundColor: "white" }}>
             <h3 className="login-title">LOGIN</h3>
-            <Form className="register-form">
+            <Form className="register-form" onKeyDown={handleKeyPress}>
               {/* 아이디 입력 */}
               <div className="login-group">
                 <span className="login-icon"> <FontAwesomeIcon icon={faFingerprint} /> </span>

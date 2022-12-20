@@ -21,13 +21,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     /* Create */
     public Comment createComment(Comment comment, String memberId, Integer postNo) {

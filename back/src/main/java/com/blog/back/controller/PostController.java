@@ -7,6 +7,7 @@ import com.blog.back.model.Post;
 import com.blog.back.service.CommentService;
 import com.blog.back.service.PostService;
 import com.blog.back.service.TagService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +26,13 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/post")
 public class PostController {
 
-    @Autowired
-    private PostService postService;
-
-    @Autowired
-    private CommentService commentService;
-
-    @Autowired
-    private TagService tagService;
+    private final PostService postService;
+    private final CommentService commentService;
+    private final TagService tagService;
 
     /* 모든 게시글 불러오기 */
     @PostMapping("/{id}")
@@ -46,9 +43,11 @@ public class PostController {
 
     /* 게시글 생성 및 태그 저장 */
     @PostMapping("")
-    public void createPost(@RequestBody PostDto postDto) {
-        postService.createPost(postDto);
-        tagService.createTag(postDto);
+    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+        Post post = postService.createPost(postDto);
+        List<String> tags = tagService.createTag(postDto);
+        PostDto responsePostDto = new PostDto(post, tags);
+        return ResponseEntity.ok(responsePostDto);
     }
 
     /* 게시글 상세 조회 */
@@ -84,9 +83,11 @@ public class PostController {
 
     /* 게시글 수정 */
     @PutMapping("/{no}")
-    public void updatePostByNo(@PathVariable Integer no, @RequestBody PostDto postDto) {
-        postService.updatePost(no, postDto);
-        tagService.updateTag(no, postDto);
+    public ResponseEntity<PostDto> updatePostByNo(@PathVariable Integer no, @RequestBody PostDto postDto) {
+        Post post = postService.updatePost(no, postDto);
+        List<String> tags = tagService.updateTag(no, postDto);
+        PostDto responsePostDto = new PostDto(post, tags);
+        return ResponseEntity.ok(responsePostDto);
     }
 
     /* 게시글 삭제 */

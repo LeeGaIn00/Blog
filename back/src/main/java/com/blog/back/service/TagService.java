@@ -5,6 +5,7 @@ import com.blog.back.model.Posttag;
 import com.blog.back.model.Tag;
 import com.blog.back.repository.PosttagRepository;
 import com.blog.back.repository.TagRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,29 +13,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TagService {
-    @Autowired
-    private TagRepository tagRepository;
-    @Autowired
-    private PosttagRepository posttagRepository;
+    private final TagRepository tagRepository;
+    private final PosttagRepository posttagRepository;
 
     /* 태그 저장 */
-    public void createTag(PostDto postDto) {
+    public List<String> createTag(PostDto postDto) {
+        List<Tag> saveTags = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
         if(postDto.getTags() != null && postDto.getTags().size() > 0) {
-            saveTag(postDto);
+            saveTags.addAll(saveTag(postDto));
             savePostTag(postDto);
         }
+        for(Tag tag : saveTags) {
+            tags.add(tag.getTitle());
+        }
+        return tags;
    }
 
-   public void updateTag(Integer no, PostDto postDto) {
+   public List<String> updateTag(Integer no, PostDto postDto) {
+       List<Tag> saveTags = new ArrayList<>();
+       List<String> tags = new ArrayList<>();
        if(postDto.getTags() != null && postDto.getTags().size() > 0) {
-           saveTag(postDto);
+           saveTags.addAll(saveTag(postDto));
            posttagRepository.deleteAllInBatch(posttagRepository.findByPostNo(no));
            postDto.getPost().setNo(no);
            savePostTag(postDto);
+           for(Tag tag : saveTags) {
+               tags.add(tag.getTitle());
+           }
        } else {
            posttagRepository.deleteAllInBatch(posttagRepository.findByPostNo(no));
        }
+       return tags;
    }
 
    public void deleteTag(Integer no) {
@@ -42,7 +54,7 @@ public class TagService {
    }
 
    /* tag 테이블에 중복 검사하여 태그 추가 */
-   private void saveTag(PostDto postDto) {
+   private List<Tag> saveTag(PostDto postDto) {
        List<Tag> tags = new ArrayList<>();
        for(String title : postDto.getTags()) {
            if(!tagRepository.existsByTitle(title)) {
@@ -50,7 +62,7 @@ public class TagService {
                tags.add(tag);
            }
        }
-       tagRepository.saveAll(tags);
+       return tagRepository.saveAll(tags);
    }
 
    /* post, tag 테이블 매핑 테이블인 posttag 테이블에 데이터 추가 */

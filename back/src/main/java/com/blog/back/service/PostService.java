@@ -7,6 +7,7 @@ import com.blog.back.model.Tag;
 import com.blog.back.repository.PostRepository;
 import com.blog.back.repository.PosttagRepository;
 import com.blog.back.repository.TagRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,11 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
-    @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private TagRepository tagRepository;
-
-    @Autowired
-    private PosttagRepository posttagRepository;
+    private final PostRepository postRepository;
+    private final TagRepository tagRepository;
+    private final PosttagRepository posttagRepository;
 
     /* 모든 게시글 불러오기 */
     public List<Post> getAllPost(String id) {
@@ -36,8 +33,8 @@ public class PostService {
     }
 
     /* 게시글 생성 및 태그 저장 */
-    public void createPost(PostDto postDto) {
-        postRepository.save(postDto.getPost());
+    public Post createPost(PostDto postDto) {
+        return postRepository.save(postDto.getPost());
     }
 
     /* 게시글 상세 조회 */
@@ -82,18 +79,7 @@ public class PostService {
         return list;
     }
 
-    /* 게시글 수정 */
-//    public ResponseEntity<Post> updatePost(Integer no, Post updatePost) {
-//        Post post = postRepository.findById(no)
-//                .orElseThrow(() -> new ResourceNotFoundException("Not exist Post Data by no : [" + no + "]"));
-//        post.setTitle(updatePost.getTitle());
-//        post.setText((updatePost.getText()));
-//        post.setUpdatedTime(new Date());
-//
-//        Post endUpdatePosst = postRepository.save(post);
-//        return ResponseEntity.ok(endUpdatePosst);
-//    }
-    public void updatePost(Integer no, PostDto postDto) {
+    public Post updatePost(Integer no, PostDto postDto) {
         Post post = postRepository.findById(no)
                 .orElseThrow(() -> new ResourceNotFoundException("Not exist Post Data by no : [" + no + "]"));
         post.setTitle(postDto.getPost().getTitle());
@@ -101,7 +87,8 @@ public class PostService {
         post.setThumbnail(postDto.getPost().getThumbnail());
         post.setUpdatedTime(new Date());
 
-        Post endUpdatePosst = postRepository.save(post);
+        Post endUpdatePost = postRepository.save(post);
+        return endUpdatePost;
     }
 
     /* 게시글 삭제 */
